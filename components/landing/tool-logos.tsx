@@ -11,7 +11,7 @@ const TOOLS = [
   { name: 'VS Code', domain: 'code.visualstudio.com' },
   { name: 'Kilo Code', domain: 'kilocode.ai' },
   { name: 'OpenClaw', domain: 'openclaw.ai' },
-  { name: 'Hermes', domain: 'hermes.dev' },
+  { name: 'Hermes', domain: 'hermes-agent.nousresearch.com' },
   { name: 'Gemini CLI', domain: 'gemini.google.com' },
   { name: 'GitHub Copilot', domain: 'github.com' },
   { name: 'Codex', domain: 'openai.com' },

@@ -2,10 +2,10 @@
 
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 import { AuthLink } from '@/components/shared/auth-link';
-import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
@@ -16,7 +16,6 @@ import {
 import { Link, usePathname } from '@/i18n/navigation';
 import { LanguageSwitcher } from '@/components/landing/language-switcher';
 import { useUser } from '@/hooks/use-user';
-import { siteConfig } from '@/lib/config';
 import { cn } from '@/lib/utils';
 
 export const Navbar = ({
@@ -75,10 +74,7 @@ export const Navbar = ({
                 className="flex items-center space-x-2"
                 prefetch={true}
               >
-                <Logo className="h-8 w-8 rounded-full text-foreground" />
-                <span className="text-xl font-bold tracking-tight text-foreground">
-                  {siteConfig.name}
-                </span>
+                <Image src="/logo.svg" alt="Cloak logo" width={48} height={48} className="h-12 w-auto" />
               </Link>
 
               <button

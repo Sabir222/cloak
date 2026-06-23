@@ -87,7 +87,7 @@ export function PackCard({
 
 				{isCompact ? (
 					<>
-						<h3 className="text-base font-semibold text-gray-900 group-hover:text-orange-500 transition-colors">
+						<h3 className="font-lora text-base font-semibold text-gray-900 group-hover:text-orange-500 transition-colors">
 							{name}
 						</h3>
 						<p className="mt-2 text-xs text-gray-500 line-clamp-2">
@@ -99,17 +99,17 @@ export function PackCard({
 									? t.skillPackContent
 									: `${agentCount} ${t.agentsIncluded}`}
 							</span>
-							<span className="text-lg font-bold text-gray-900">
+							<span className="font-lora text-lg font-bold text-gray-900">
 								${(priceCents / 100).toFixed(0)}
 							</span>
 						</div>
 					</>
 				) : (
 					<>
-						<h3 className="text-xl font-bold text-gray-900">{name}</h3>
+						<h3 className="font-lora text-xl font-bold text-gray-900">{name}</h3>
 						<p className="mt-2 text-sm text-gray-500 flex-1">{description}</p>
 						<div className="mt-6 flex items-end gap-1">
-							<span className="text-4xl font-bold text-gray-900">
+							<span className="font-lora text-4xl font-bold text-gray-900">
 								${(priceCents / 100).toFixed(0)}
 							</span>
 							<span className="text-sm text-gray-400 mb-1.5">{t.oneTime}</span>
@@ -165,7 +165,7 @@ export function PackLinkCard({
 				gradientOpacity={0.12}
 			>
 				<div className="p-6">
-					<h3 className="text-base font-semibold text-gray-900 group-hover:text-orange-500 transition-colors">
+					<h3 className="font-lora text-base font-semibold text-gray-900 group-hover:text-orange-500 transition-colors">
 						{name}
 					</h3>
 					<p className="mt-2 text-xs text-gray-500 line-clamp-2">
@@ -177,7 +177,7 @@ export function PackLinkCard({
 								? t.skillPackContent
 								: `${agentCount} ${t.agentsIncluded}`}
 						</span>
-						<span className="text-lg font-bold text-gray-900">
+						<span className="font-lora text-lg font-bold text-gray-900">
 							${(priceCents / 100).toFixed(0)}
 						</span>
 					</div>

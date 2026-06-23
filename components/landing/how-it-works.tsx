@@ -3,7 +3,7 @@
 import { useRef } from "react"
 import Image from "next/image"
 import { useTranslations } from "next-intl"
-import { Package, Sparkles } from "lucide-react"
+import { Package, CreditCard } from "lucide-react"
 import { AnimatedBeam } from "@/components/ui/animated-beam"
 import { cn } from "@/lib/utils"
 
@@ -11,9 +11,10 @@ const TOOLS = [
   { name: "Claude Code", domain: "anthropic.com" },
   { name: "Cursor", domain: "cursor.com" },
   { name: "Windsurf", domain: "codeium.com" },
-  { name: "VS Code", domain: "code.visualstudio.com" },
+  { name: "Hermes", domain: "hermes-agent.nousresearch.com" },
   { name: "GitHub Copilot", domain: "github.com" },
   { name: "OpenCode", domain: "opencode.ai" },
+  { name: "OpenClaw", domain: "openclaw.ai" },
 ]
 
 function Circle({
@@ -50,6 +51,7 @@ export function HowItWorksSection() {
     useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
   ]
 
   return (
@@ -68,7 +70,7 @@ export function HowItWorksSection() {
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl pointer-events-none" />
 
           <div
-            className="relative flex h-[500px] items-center justify-center p-10"
+            className="relative flex h-[550px] items-center justify-center p-10"
             ref={containerRef}
           >
             <div className="absolute left-0 md:left-10 top-1/2 -translate-y-1/2 z-10">
@@ -79,7 +81,7 @@ export function HowItWorksSection() {
 
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
               <Circle ref={centerRef} className="size-16 border-orange-300 bg-orange-50">
-                <Sparkles className="size-6 text-orange-500" />
+                <CreditCard className="size-6 text-orange-500" />
               </Circle>
             </div>
 

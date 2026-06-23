@@ -26,7 +26,25 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Lora';
+  src: url('/fonts/lora/Lora-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lora';
+  src: url('/fonts/lora/Lora-SemiBoldItalic.woff2') format('woff2');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
 @theme {
+  --font-lora: 'Lora', serif;
+  --font-sans: 'Plus Jakarta Sans', Arial, Helvetica, sans-serif;
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
 
@@ -95,7 +113,7 @@
 
 @layer utilities {
   body {
-    font-family: "Manrope", Arial, Helvetica, sans-serif;
+    font-family: "Plus Jakarta Sans", Arial, Helvetica, sans-serif;
   }
 }
 
@@ -178,6 +196,10 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  h1, h2 {
+    font-family: 'Lora', serif;
+    font-weight: 600;
   }
 }
 

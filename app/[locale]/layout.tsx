@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next';
-import { Manrope } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 
@@ -7,8 +6,6 @@ import { routing } from '@/i18n/routing';
 import { SWRProvider } from '@/components/swr-provider';
 import { Navbar } from '@/components/landing/navbar';
 import { getUser, getTeamForUser } from '@/lib/db/queries';
-
-const manrope = Manrope({ subsets: ['latin'] });
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -46,7 +43,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`bg-white dark:bg-gray-950 text-black dark:text-white ${manrope.className}`}
+      className="bg-white dark:bg-gray-950 text-black dark:text-white"
     >
       <body className="min-h-[100dvh] bg-gray-50 dark:bg-gray-950">
         <NextIntlClientProvider messages={messages}>

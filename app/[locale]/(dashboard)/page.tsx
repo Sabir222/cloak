@@ -1,4 +1,4 @@
-import { ArrowRight, Check, Sparkles } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AnimatedStats } from "@/components/landing/animated-stats";
 import { HowItWorksSection } from "@/components/landing/how-it-works";
@@ -33,8 +33,8 @@ export default async function HomePage({
       <section className="relative py-20 sm:py-28 overflow-hidden min-h-[580px] flex items-center">
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-orange-50/50 via-transparent to-transparent" />
 
-        {/* Top-left decorative SVG cluster */}
-        <div className="absolute top-0 left-0 -translate-x-[10px] -translate-y-[165px] opacity-90 pointer-events-none select-none z-0">
+        {/* Top-left decorative SVG cluster — desktop only */}
+        <div className="hidden md:block absolute top-0 left-0 -translate-x-[10px] -translate-y-[165px] opacity-90 pointer-events-none select-none z-0">
           <img
             src="/svg-all.svg"
             alt=""
@@ -43,8 +43,8 @@ export default async function HomePage({
           />
         </div>
 
-        {/* Bottom-right decorative SVG cluster */}
-        <div className="absolute bottom-0 right-0 translate-x-[10px] translate-y-[120px] opacity-90 pointer-events-none select-none z-0">
+        {/* Bottom-right decorative SVG cluster — desktop only */}
+        <div className="hidden md:block absolute bottom-0 right-0 translate-x-[10px] translate-y-[120px] opacity-90 pointer-events-none select-none z-0">
           <img
             src="/svg-all.svg"
             alt=""
@@ -53,9 +53,13 @@ export default async function HomePage({
           />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-100 text-orange-700 text-sm font-medium mb-6 animate-in fade-in slide-in-from-bottom-2 duration-700">
-            <Sparkles className="size-4" />
-            {t("badge")}
+          <div className="block md:hidden mb-6">
+            <img
+              src="/svg-all-2.svg"
+              alt=""
+              className="mx-auto w-[300px] h-auto"
+              aria-hidden="true"
+            />
           </div>
           <h1 className="text-4xl font-bold text-gray-900 tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
             {t("heroTitle")}
