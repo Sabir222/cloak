@@ -35,7 +35,7 @@ export default async function PricingPage({
 	const regular = packs.filter((p) => !p.isFeatured);
 
 	return (
-		<main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+		<main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[110px] pb-16">
 			<div className="text-center mb-14">
 				<div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-100 text-orange-700 text-sm font-medium mb-6">
 					<Package className="size-4" />

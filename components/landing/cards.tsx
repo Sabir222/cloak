@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { HandDrawnBorder } from "@/components/ui/hand-drawn-border";
+import { RoughBorder } from "@/components/ui/rough-border";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
@@ -46,13 +46,13 @@ export function PackCard({
 	const isCompact = variant === "compact";
 
 	return (
-		<HandDrawnBorder
+		<RoughBorder
 			color={isFeatured ? "#f97316" : "#9ca3af"}
 			strokeWidth={isFeatured ? 2.5 : 2}
 			borderRadius={12}
 			padding="p-0"
-			sketchAmount={3}
-			doubleLine
+			roughness={2}
+			bowing={1}
 			className={cn("h-full", className)}
 		>
 			<div className="flex flex-col h-full">
@@ -107,7 +107,7 @@ export function PackCard({
 					)}
 				</div>
 			</div>
-		</HandDrawnBorder>
+		</RoughBorder>
 	);
 }
 
@@ -141,13 +141,13 @@ export function PackLinkCard({
 
 	return (
 		<Link href={`/packs/${slug}`} className={cn("block h-full", className)}>
-			<HandDrawnBorder
+			<RoughBorder
 				color="#9ca3af"
 				strokeWidth={2}
 				borderRadius={12}
 				padding="p-0"
-				sketchAmount={3}
-				doubleLine
+				roughness={2}
+				bowing={1}
 				className="h-full"
 			>
 				<div className="p-5">
@@ -168,7 +168,7 @@ export function PackLinkCard({
 						</span>
 					</div>
 				</div>
-			</HandDrawnBorder>
+			</RoughBorder>
 		</Link>
 	);
 }
@@ -188,13 +188,13 @@ export function FeatureCard({
 	className,
 }: FeatureCardProps) {
 	return (
-		<HandDrawnBorder
+		<RoughBorder
 			color="#9ca3af"
 			strokeWidth={2}
 			borderRadius={12}
 			padding="p-0"
-			sketchAmount={3}
-			doubleLine
+			roughness={2}
+			bowing={1}
 			className={cn("h-full", className)}
 		>
 			<div className="p-6">
@@ -204,7 +204,7 @@ export function FeatureCard({
 				<h3 className="text-base font-semibold text-gray-900 mb-2">{title}</h3>
 				<p className="text-gray-500 text-sm leading-relaxed">{description}</p>
 			</div>
-		</HandDrawnBorder>
+		</RoughBorder>
 	);
 }
 
@@ -233,13 +233,13 @@ export function AgentCard({
 	const isSmall = size === "small";
 
 	const content = (
-		<HandDrawnBorder
+		<RoughBorder
 			color={isSelected ? "#f97316" : "#d1d5db"}
 			strokeWidth={isSelected ? 2.5 : 2}
 			borderRadius={10}
 			padding="p-0"
-			sketchAmount={3}
-			doubleLine
+			roughness={2}
+			bowing={1}
 			className={cn(
 				"h-full transition-all",
 				className,
@@ -269,7 +269,7 @@ export function AgentCard({
 					{description}
 				</p>
 			</div>
-		</HandDrawnBorder>
+		</RoughBorder>
 	);
 
 	if (onClick) {
@@ -298,13 +298,13 @@ export function TestimonialCard({
 	className,
 }: TestimonialCardProps) {
 	return (
-		<HandDrawnBorder
+		<RoughBorder
 			color="#9ca3af"
 			strokeWidth={2}
 			borderRadius={12}
 			padding="p-0"
-			sketchAmount={3}
-			doubleLine
+			roughness={2}
+			bowing={1}
 			className={cn("h-full", className)}
 		>
 			<div className="p-6">
@@ -332,7 +332,7 @@ export function TestimonialCard({
 					</div>
 				</div>
 			</div>
-		</HandDrawnBorder>
+		</RoughBorder>
 	);
 }
 
@@ -377,16 +377,16 @@ export function ShineCard({
 	className,
 }: ShineCardProps) {
 	return (
-		<HandDrawnBorder
+		<RoughBorder
 			color="#9ca3af"
 			strokeWidth={2}
 			borderRadius={12}
 			padding="p-0"
-			sketchAmount={3}
-			doubleLine
+			roughness={2}
+			bowing={1}
 			className={cn("h-full", className)}
 		>
 			<div className="p-6">{children}</div>
-		</HandDrawnBorder>
+		</RoughBorder>
 	);
 }

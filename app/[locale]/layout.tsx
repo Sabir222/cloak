@@ -5,6 +5,7 @@ import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server
 import { routing } from '@/i18n/routing';
 import { SWRProvider } from '@/components/swr-provider';
 import { Navbar } from '@/components/landing/navbar';
+import { Footer } from '@/components/landing/footer';
 import { getUser, getTeamForUser } from '@/lib/db/queries';
 
 export function generateStaticParams() {
@@ -63,6 +64,7 @@ export default async function LocaleLayout({
           >
             <Navbar />
             {children}
+            <Footer />
           </SWRProvider>
         </NextIntlClientProvider>
       </body>
