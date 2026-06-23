@@ -1,0 +1,401 @@
+"use client";
+
+import type { ReactNode } from "react";
+import { MagicCard } from "@/components/ui/magic-card";
+import { ShineBorder } from "@/components/ui/shine-border";
+import { Link } from "@/i18n/navigation";
+import { cn } from "@/lib/utils";
+
+/* ─── Pack Card ─── */
+type PackCardProps = {
+	name: string;
+	description: string | null;
+	priceCents: number;
+	agentCount: number;
+	bundleType?: string | null;
+	isFeatured?: boolean;
+	badge?: string;
+	className?: string;
+	variant?: "default" | "pricing" | "compact";
+	cta?: ReactNode;
+	translations: {
+		oneTime: string;
+		agentsIncluded: string;
+		skillPackContent: string;
+		getPack: string;
+		popular?: string;
+		from?: string;
+		viewPack?: string;
+	};
+};
+
+export function PackCard({
+	name,
+	description,
+	priceCents,
+	agentCount,
+	bundleType,
+	isFeatured,
+	badge,
+	className,
+	variant = "default",
+	cta,
+	translations,
+}: PackCardProps) {
+	const t = translations;
+	const isSkill = bundleType === "skill-pack";
+	const isPricing = variant === "pricing";
+	const isCompact = variant === "compact";
+
+	const magicProps = badge
+		? {
+				mode: "orb" as const,
+				glowFrom: "#f97316",
+				glowTo: "#fb923c",
+				glowSize: 300,
+				glowBlur: 50,
+				glowOpacity: 0.6,
+			}
+		: {
+				mode: "gradient" as const,
+				gradientFrom: "#f97316",
+				gradientTo: "#fb923c",
+				gradientSize: 300,
+				gradientOpacity: 0.15,
+			};
+
+	return (
+		<MagicCard
+			className={cn(
+				"flex flex-col rounded-2xl",
+				isPricing && isFeatured && "ring-2 ring-orange-200",
+				className,
+			)}
+			{...magicProps}
+		>
+			<div className="relative flex flex-col flex-1 p-6">
+				{badge && (
+					<span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-orange-500 text-white text-xs font-semibold whitespace-nowrap z-50">
+						{badge}
+					</span>
+				)}
+				{isFeatured && !badge && (
+					<span className="inline-flex items-center rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-medium text-orange-700 w-fit mb-2">
+						{t.popular}
+					</span>
+				)}
+
+				{isCompact ? (
+					<>
+						<h3 className="text-base font-semibold text-gray-900 group-hover:text-orange-500 transition-colors">
+							{name}
+						</h3>
+						<p className="mt-2 text-xs text-gray-500 line-clamp-2">
+							{description}
+						</p>
+						<div className="mt-4 flex items-center justify-between">
+							<span className="text-xs text-gray-400">
+								{isSkill
+									? t.skillPackContent
+									: `${agentCount} ${t.agentsIncluded}`}
+							</span>
+							<span className="text-lg font-bold text-gray-900">
+								${(priceCents / 100).toFixed(0)}
+							</span>
+						</div>
+					</>
+				) : (
+					<>
+						<h3 className="text-xl font-bold text-gray-900">{name}</h3>
+						<p className="mt-2 text-sm text-gray-500 flex-1">{description}</p>
+						<div className="mt-6 flex items-end gap-1">
+							<span className="text-4xl font-bold text-gray-900">
+								${(priceCents / 100).toFixed(0)}
+							</span>
+							<span className="text-sm text-gray-400 mb-1.5">{t.oneTime}</span>
+						</div>
+						<div className="mt-2 text-sm text-gray-500">
+							{isSkill
+								? t.skillPackContent
+								: `${agentCount} ${t.agentsIncluded}`}
+						</div>
+						{cta && <div className="mt-6">{cta}</div>}
+					</>
+				)}
+			</div>
+		</MagicCard>
+	);
+}
+
+/* ─── Pack Link Card ─── */
+type PackLinkCardProps = {
+	name: string;
+	description: string | null;
+	priceCents: number;
+	agentCount: number;
+	bundleType?: string | null;
+	slug: string;
+	className?: string;
+	translations: {
+		agentsIncluded: string;
+		skillPackContent: string;
+	};
+};
+
+export function PackLinkCard({
+	name,
+	description,
+	priceCents,
+	agentCount,
+	bundleType,
+	slug,
+	className,
+	translations,
+}: PackLinkCardProps) {
+	const t = translations;
+	const isSkill = bundleType === "skill-pack";
+
+	return (
+		<Link href={`/packs/${slug}`} className={cn("block", className)}>
+			<MagicCard
+				className="flex flex-col rounded-2xl"
+				gradientFrom="#f97316"
+				gradientTo="#fb923c"
+				gradientSize={200}
+				gradientOpacity={0.12}
+			>
+				<div className="p-6">
+					<h3 className="text-base font-semibold text-gray-900 group-hover:text-orange-500 transition-colors">
+						{name}
+					</h3>
+					<p className="mt-2 text-xs text-gray-500 line-clamp-2">
+						{description}
+					</p>
+					<div className="mt-4 flex items-center justify-between">
+						<span className="text-xs text-gray-400">
+							{isSkill
+								? t.skillPackContent
+								: `${agentCount} ${t.agentsIncluded}`}
+						</span>
+						<span className="text-lg font-bold text-gray-900">
+							${(priceCents / 100).toFixed(0)}
+						</span>
+					</div>
+				</div>
+			</MagicCard>
+		</Link>
+	);
+}
+
+/* ─── Feature Card ─── */
+type FeatureCardProps = {
+	icon: ReactNode;
+	title: string;
+	description: string;
+	className?: string;
+};
+
+export function FeatureCard({
+	icon,
+	title,
+	description,
+	className,
+}: FeatureCardProps) {
+	return (
+		<MagicCard
+			className={cn("rounded-2xl", className)}
+			gradientFrom="#f97316"
+			gradientTo="#fb923c"
+			gradientSize={250}
+			gradientOpacity={0.12}
+		>
+			<div className="p-8">
+				<div className="inline-flex items-center justify-center size-12 rounded-xl bg-orange-500/10 text-orange-500 mb-5 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+					{icon}
+				</div>
+				<h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
+				<p className="text-gray-500 text-sm">{description}</p>
+			</div>
+		</MagicCard>
+	);
+}
+
+/* ─── Agent Card ─── */
+type AgentCardProps = {
+	emoji?: string | null;
+	name: string;
+	division: string;
+	description: string | null;
+	isSelected?: boolean;
+	onClick?: () => void;
+	className?: string;
+	size?: "default" | "small";
+};
+
+export function AgentCard({
+	emoji,
+	name,
+	division,
+	description,
+	isSelected,
+	onClick,
+	className,
+	size = "default",
+}: AgentCardProps) {
+	const isSmall = size === "small";
+
+	const content = (
+		<MagicCard
+			className={cn(
+				"rounded-xl",
+				isSelected && "ring-2 ring-orange-500",
+				className,
+			)}
+			gradientFrom="#f97316"
+			gradientTo="#fb923c"
+			gradientSize={200}
+			gradientOpacity={isSelected ? 0.2 : 0.08}
+		>
+			<div className={cn(isSmall ? "p-5" : "p-4")}>
+				<div className={cn("mb-3", isSmall ? "text-2xl" : "text-2xl")}>
+					{emoji || "🤖"}
+				</div>
+				<h3
+					className={cn(
+						"font-semibold text-gray-900",
+						isSmall ? "text-sm" : "font-medium",
+					)}
+				>
+					{name}
+				</h3>
+				<p className="mt-1 text-xs text-gray-400 capitalize">
+					{division.replace("-", " ")}
+				</p>
+				<p
+					className={cn(
+						"text-gray-500 line-clamp-2",
+						isSmall ? "mt-2 text-xs" : "mt-1 text-sm",
+					)}
+				>
+					{description}
+				</p>
+			</div>
+		</MagicCard>
+	);
+
+	if (onClick) {
+		return (
+			<button type="button" onClick={onClick} className="text-left w-full">
+				{content}
+			</button>
+		);
+	}
+
+	return content;
+}
+
+/* ─── Testimonial Card ─── */
+type TestimonialCardProps = {
+	name: string;
+	role: string;
+	text: string;
+	className?: string;
+};
+
+export function TestimonialCard({
+	name,
+	role,
+	text,
+	className,
+}: TestimonialCardProps) {
+	return (
+		<MagicCard
+			className={cn("rounded-2xl", className)}
+			gradientFrom="#f97316"
+			gradientTo="#fb923c"
+			gradientSize={250}
+			gradientOpacity={0.1}
+		>
+			<div className="p-8">
+				<div className="flex gap-1 mb-4">
+					{[...Array(5)].map((_, i) => (
+						<svg
+							key={i}
+							className="size-4 fill-orange-500 text-orange-500"
+							viewBox="0 0 16 16"
+						>
+							<path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z" />
+						</svg>
+					))}
+				</div>
+				<p className="text-gray-700 text-sm leading-relaxed mb-6">
+					&ldquo;{text}&rdquo;
+				</p>
+				<div className="flex items-center gap-3">
+					<div className="size-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-semibold text-sm">
+						{name.charAt(0)}
+					</div>
+					<div>
+						<div className="text-sm font-semibold text-gray-900">{name}</div>
+						<div className="text-xs text-gray-500">{role}</div>
+					</div>
+				</div>
+			</div>
+		</MagicCard>
+	);
+}
+
+/* ─── Step Card ─── */
+type StepCardProps = {
+	step: number;
+	icon: ReactNode;
+	title: string;
+	description: string;
+	stepLabel: string;
+};
+
+export function StepCard({
+	step,
+	icon,
+	title,
+	description,
+	stepLabel,
+}: StepCardProps) {
+	return (
+		<div className="relative text-center">
+			<div className="inline-flex items-center justify-center size-12 rounded-2xl bg-orange-500 text-white shadow-lg shadow-orange-500/20 mb-5 relative z-10">
+				{icon}
+			</div>
+			<div className="text-sm font-semibold text-orange-500 mb-2">
+				{stepLabel} {step}
+			</div>
+			<h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
+			<p className="text-gray-500 text-sm max-w-xs mx-auto">{description}</p>
+		</div>
+	);
+}
+
+/* ─── Shine Card ─── */
+type ShineCardProps = {
+	children: ReactNode;
+	className?: string;
+	shineColor?: string | string[];
+	borderWidth?: number;
+};
+
+export function ShineCard({
+	children,
+	className,
+	shineColor,
+	borderWidth,
+}: ShineCardProps) {
+	return (
+		<div className={cn("relative overflow-hidden rounded-xl", className)}>
+			<ShineBorder
+				shineColor={shineColor || ["#f97316", "#fb923c"]}
+				borderWidth={borderWidth || 1}
+			/>
+			<div className="relative z-10 bg-white p-6">{children}</div>
+		</div>
+	);
+}

@@ -3,16 +3,39 @@
 import { useTranslations } from 'next-intl';
 
 import { Link } from '@/i18n/navigation';
-import { CircleIcon } from 'lucide-react';
 
 export default function NotFound() {
   const t = useTranslations('notFound');
 
   return (
-    <div className="flex items-center justify-center min-h-[100dvh]">
-      <div className="max-w-md space-y-8 p-4 text-center">
+    <div className="relative flex items-center justify-center min-h-[100dvh] overflow-hidden">
+      {/* Top-left decorative SVG cluster */}
+      <div className="absolute top-0 left-0 -translate-x-[10px] -translate-y-[165px] opacity-90 pointer-events-none select-none z-0">
+        <img
+          src="/svg-all.svg"
+          alt=""
+          className="w-[60px] sm:w-[320px] md:w-[250px]"
+          aria-hidden="true"
+        />
+      </div>
+
+      {/* Bottom-right decorative SVG cluster */}
+      <div className="absolute bottom-0 right-0 translate-x-[10px] translate-y-[120px] opacity-90 pointer-events-none select-none z-0">
+        <img
+          src="/svg-all.svg"
+          alt=""
+          className="w-[70px] sm:w-[320px] md:w-[250px]"
+          aria-hidden="true"
+        />
+      </div>
+
+      <div className="relative z-10 max-w-md space-y-8 p-4 text-center">
         <div className="flex justify-center">
-          <CircleIcon className="size-12 text-orange-500" />
+          <img
+            src="/404.svg"
+            alt="404"
+            className="w-full max-w-[300px]"
+          />
         </div>
         <h1 className="text-4xl font-bold text-gray-900 tracking-tight">
           {t('title')}
