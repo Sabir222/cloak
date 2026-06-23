@@ -1,8 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { MagicCard } from "@/components/ui/magic-card";
-import { ShineBorder } from "@/components/ui/shine-border";
+import { HandDrawnBorder } from "@/components/ui/hand-drawn-border";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
@@ -44,86 +43,71 @@ export function PackCard({
 }: PackCardProps) {
 	const t = translations;
 	const isSkill = bundleType === "skill-pack";
-	const isPricing = variant === "pricing";
 	const isCompact = variant === "compact";
 
-	const magicProps = badge
-		? {
-				mode: "orb" as const,
-				glowFrom: "#f97316",
-				glowTo: "#fb923c",
-				glowSize: 300,
-				glowBlur: 50,
-				glowOpacity: 0.6,
-			}
-		: {
-				mode: "gradient" as const,
-				gradientFrom: "#f97316",
-				gradientTo: "#fb923c",
-				gradientSize: 300,
-				gradientOpacity: 0.15,
-			};
-
 	return (
-		<MagicCard
-			className={cn(
-				"flex flex-col rounded-2xl",
-				isPricing && isFeatured && "ring-2 ring-orange-200",
-				className,
-			)}
-			{...magicProps}
+		<HandDrawnBorder
+			color={isFeatured ? "#f97316" : "#9ca3af"}
+			strokeWidth={isFeatured ? 2.5 : 2}
+			borderRadius={12}
+			padding="p-0"
+			sketchAmount={3}
+			doubleLine
+			className={cn("h-full", className)}
 		>
-			<div className="flex flex-col flex-1 p-6">
+			<div className="flex flex-col h-full">
 				{badge && (
-					<span className="relative -mt-3 mb-3 mx-auto w-fit px-4 py-1 rounded-full bg-orange-500 text-white text-xs font-semibold whitespace-nowrap z-50">
+					<span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-orange-500 text-white text-xs font-semibold whitespace-nowrap z-20">
 						{badge}
 					</span>
 				)}
-				{isFeatured && !badge && (
-					<span className="inline-flex items-center rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-medium text-orange-700 w-fit mb-2">
-						{t.popular}
-					</span>
-				)}
+				<div className="flex flex-col flex-1 p-5">
+					{isFeatured && !badge && (
+						<span className="inline-flex items-center rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-medium text-orange-700 w-fit mb-2">
+							{t.popular}
+						</span>
+					)}
 
-				{isCompact ? (
-					<>
-						<h3 className="font-lora text-base font-semibold text-gray-900 group-hover:text-orange-500 transition-colors">
-							{name}
-						</h3>
-						<p className="mt-2 text-xs text-gray-500 line-clamp-2">
-							{description}
-						</p>
-						<div className="mt-4 flex items-center justify-between">
-							<span className="text-xs text-gray-400">
+					{isCompact ? (
+						<>
+							<h3 className="font-lora text-base font-semibold text-gray-900">
+								{name}
+							</h3>
+							<p className="mt-2 text-xs text-gray-500 line-clamp-2">
+								{description}
+							</p>
+							<div className="mt-4 flex items-center justify-between">
+								<span className="text-xs text-gray-400">
+									{isSkill
+										? t.skillPackContent
+										: `${agentCount} ${t.agentsIncluded}`}
+								</span>
+								<span className="font-lora text-lg font-bold text-gray-900">
+									${(priceCents / 100).toFixed(0)}
+								</span>
+							</div>
+						</>
+					) : (
+						<>
+							<h3 className="font-lora text-xl font-bold text-gray-900">{name}</h3>
+							<p className="mt-2 text-sm text-gray-500 line-clamp-3 flex-1">{description}</p>
+							<div className="mt-6 flex items-end gap-1">
+								<span className="font-lora text-4xl font-bold text-gray-900">
+									${(priceCents / 100).toFixed(0)}
+								</span>
+								<span className="text-sm text-gray-400 mb-1.5">{t.oneTime}</span>
+							</div>
+							<div className="mt-2 text-sm text-gray-500">
 								{isSkill
 									? t.skillPackContent
 									: `${agentCount} ${t.agentsIncluded}`}
-							</span>
-							<span className="font-lora text-lg font-bold text-gray-900">
-								${(priceCents / 100).toFixed(0)}
-							</span>
-						</div>
-					</>
-				) : (
-					<>
-						<h3 className="font-lora text-xl font-bold text-gray-900">{name}</h3>
-						<p className="mt-2 text-sm text-gray-500 line-clamp-3 flex-1">{description}</p>
-						<div className="mt-6 flex items-end gap-1">
-							<span className="font-lora text-4xl font-bold text-gray-900">
-								${(priceCents / 100).toFixed(0)}
-							</span>
-							<span className="text-sm text-gray-400 mb-1.5">{t.oneTime}</span>
-						</div>
-						<div className="mt-2 text-sm text-gray-500">
-							{isSkill
-								? t.skillPackContent
-								: `${agentCount} ${t.agentsIncluded}`}
-						</div>
-						{cta && <div className="mt-auto pt-6">{cta}</div>}
-					</>
-				)}
+							</div>
+							{cta && <div className="mt-auto pt-6">{cta}</div>}
+						</>
+					)}
+				</div>
 			</div>
-		</MagicCard>
+		</HandDrawnBorder>
 	);
 }
 
@@ -156,16 +140,18 @@ export function PackLinkCard({
 	const isSkill = bundleType === "skill-pack";
 
 	return (
-		<Link href={`/packs/${slug}`} className={cn("block", className)}>
-			<MagicCard
-				className="flex flex-col rounded-2xl"
-				gradientFrom="#f97316"
-				gradientTo="#fb923c"
-				gradientSize={200}
-				gradientOpacity={0.12}
+		<Link href={`/packs/${slug}`} className={cn("block h-full", className)}>
+			<HandDrawnBorder
+				color="#9ca3af"
+				strokeWidth={2}
+				borderRadius={12}
+				padding="p-0"
+				sketchAmount={3}
+				doubleLine
+				className="h-full"
 			>
-				<div className="p-6">
-					<h3 className="font-lora text-base font-semibold text-gray-900 group-hover:text-orange-500 transition-colors">
+				<div className="p-5">
+					<h3 className="font-lora text-base font-semibold text-gray-900">
 						{name}
 					</h3>
 					<p className="mt-2 text-xs text-gray-500 line-clamp-2">
@@ -182,7 +168,7 @@ export function PackLinkCard({
 						</span>
 					</div>
 				</div>
-			</MagicCard>
+			</HandDrawnBorder>
 		</Link>
 	);
 }
@@ -202,21 +188,23 @@ export function FeatureCard({
 	className,
 }: FeatureCardProps) {
 	return (
-		<MagicCard
-			className={cn("rounded-2xl", className)}
-			gradientFrom="#f97316"
-			gradientTo="#fb923c"
-			gradientSize={250}
-			gradientOpacity={0.12}
+		<HandDrawnBorder
+			color="#9ca3af"
+			strokeWidth={2}
+			borderRadius={12}
+			padding="p-0"
+			sketchAmount={3}
+			doubleLine
+			className={cn("h-full", className)}
 		>
-			<div className="p-8">
-				<div className="inline-flex items-center justify-center size-12 rounded-xl bg-orange-500/10 text-orange-500 mb-5 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+			<div className="p-6">
+				<div className="inline-flex items-center justify-center size-10 rounded-lg bg-orange-500/10 text-orange-500 mb-4">
 					{icon}
 				</div>
-				<h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-				<p className="text-gray-500 text-sm">{description}</p>
+				<h3 className="text-base font-semibold text-gray-900 mb-2">{title}</h3>
+				<p className="text-gray-500 text-sm leading-relaxed">{description}</p>
 			</div>
-		</MagicCard>
+		</HandDrawnBorder>
 	);
 }
 
@@ -245,20 +233,21 @@ export function AgentCard({
 	const isSmall = size === "small";
 
 	const content = (
-		<MagicCard
+		<HandDrawnBorder
+			color={isSelected ? "#f97316" : "#d1d5db"}
+			strokeWidth={isSelected ? 2.5 : 2}
+			borderRadius={10}
+			padding="p-0"
+			sketchAmount={3}
+			doubleLine
 			className={cn(
-				"rounded-xl",
-				isSelected && "ring-2 ring-orange-500",
+				"h-full transition-all",
 				className,
 			)}
-			gradientFrom="#f97316"
-			gradientTo="#fb923c"
-			gradientSize={200}
-			gradientOpacity={isSelected ? 0.2 : 0.08}
 		>
-			<div className={cn(isSmall ? "p-5" : "p-4")}>
-				<div className={cn("mb-3", isSmall ? "text-2xl" : "text-2xl")}>
-					{emoji || "🤖"}
+			<div className={cn(isSmall ? "p-4" : "p-4")}>
+				<div className={cn("mb-2")}>
+					<span className="text-2xl">{emoji || "🤖"}</span>
 				</div>
 				<h3
 					className={cn(
@@ -280,12 +269,12 @@ export function AgentCard({
 					{description}
 				</p>
 			</div>
-		</MagicCard>
+		</HandDrawnBorder>
 	);
 
 	if (onClick) {
 		return (
-			<button type="button" onClick={onClick} className="text-left w-full">
+			<button type="button" onClick={onClick} className="text-left w-full h-full">
 				{content}
 			</button>
 		);
@@ -309,14 +298,16 @@ export function TestimonialCard({
 	className,
 }: TestimonialCardProps) {
 	return (
-		<MagicCard
-			className={cn("rounded-2xl", className)}
-			gradientFrom="#f97316"
-			gradientTo="#fb923c"
-			gradientSize={250}
-			gradientOpacity={0.1}
+		<HandDrawnBorder
+			color="#9ca3af"
+			strokeWidth={2}
+			borderRadius={12}
+			padding="p-0"
+			sketchAmount={3}
+			doubleLine
+			className={cn("h-full", className)}
 		>
-			<div className="p-8">
+			<div className="p-6">
 				<div className="flex gap-1 mb-4">
 					{[...Array(5)].map((_, i) => (
 						<svg
@@ -341,7 +332,7 @@ export function TestimonialCard({
 					</div>
 				</div>
 			</div>
-		</MagicCard>
+		</HandDrawnBorder>
 	);
 }
 
@@ -379,23 +370,23 @@ export function StepCard({
 type ShineCardProps = {
 	children: ReactNode;
 	className?: string;
-	shineColor?: string | string[];
-	borderWidth?: number;
 };
 
 export function ShineCard({
 	children,
 	className,
-	shineColor,
-	borderWidth,
 }: ShineCardProps) {
 	return (
-		<div className={cn("relative overflow-hidden rounded-xl", className)}>
-			<ShineBorder
-				shineColor={shineColor || ["#f97316", "#fb923c"]}
-				borderWidth={borderWidth || 1}
-			/>
-			<div className="relative z-10 bg-white p-6">{children}</div>
-		</div>
+		<HandDrawnBorder
+			color="#9ca3af"
+			strokeWidth={2}
+			borderRadius={12}
+			padding="p-0"
+			sketchAmount={3}
+			doubleLine
+			className={cn("h-full", className)}
+		>
+			<div className="p-6">{children}</div>
+		</HandDrawnBorder>
 	);
 }
