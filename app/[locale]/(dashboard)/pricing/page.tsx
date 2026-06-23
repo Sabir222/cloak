@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Package } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PackCard as PackCardComponent } from "@/components/landing/cards";
+import { HandDrawnBorder } from "@/components/ui/hand-drawn-border";
 import { RoughButton } from "@/components/ui/rough-button";
 import { getAllPacks } from "@/lib/db/queries";
 
@@ -69,9 +70,15 @@ export default async function PricingPage({
 					{TIERS.map((tier) => {
 						const priceLabel = tier.price % 1 === 0 ? `$${tier.price}` : `$${tier.price.toFixed(2)}`;
 						return (
-							<div
+							<HandDrawnBorder
 								key={tier.key}
-								className="rounded-xl border border-gray-200 bg-white p-5 text-center"
+								color="#d1d5db"
+								strokeWidth={2}
+								borderRadius={12}
+								padding="p-5"
+								doubleLine={false}
+								sketchAmount={3}
+								className="text-center"
 							>
 								<div className="text-sm font-semibold text-gray-900 mb-1">
 									{t(`${tier.key}Label`)}
@@ -85,7 +92,7 @@ export default async function PricingPage({
 										{t(`${tier.key}Discount`)}
 									</div>
 								)}
-							</div>
+							</HandDrawnBorder>
 						);
 					})}
 				</div>
