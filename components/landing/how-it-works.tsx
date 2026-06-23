@@ -84,7 +84,7 @@ export function HowItWorksSection() {
               gradientStartColor="#f97316"
               gradientStopColor="#f97316"
               pathColor="#f97316"
-              pathWidth={2}
+              pathWidth={0.8}
             />
 
             {rightRefs.map((ref, i) => (
@@ -97,7 +97,7 @@ export function HowItWorksSection() {
                 gradientStartColor="#f97316"
                 gradientStopColor="#f97316"
                 pathColor="#f97316"
-                pathWidth={2}
+                pathWidth={0.8}
               />
             ))}
           </div>
