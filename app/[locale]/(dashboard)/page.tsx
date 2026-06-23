@@ -254,22 +254,32 @@ export default async function HomePage({
 
       {/* ─── FAQ ─── */}
       <section className="py-20 bg-white">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-              {t("faqTitle")}
-            </h2>
-          </div>
-          <div>
-            <FaqAccordion
-              items={[
-                { q: t("faq1Q"), a: t("faq1A") },
-                { q: t("faq2Q"), a: t("faq2A") },
-                { q: t("faq3Q"), a: t("faq3A") },
-                { q: t("faq4Q"), a: t("faq4A") },
-                { q: t("faq5Q"), a: t("faq5A") },
-              ]}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-start gap-8">
+          <div className="hidden md:block flex-shrink-0 self-stretch pointer-events-none select-none">
+            <img
+              src="/svg-all.svg"
+              alt=""
+              className="h-full w-auto"
+              aria-hidden="true"
             />
+          </div>
+          <div className="flex-1 max-w-3xl">
+            <div className="text-center mb-14">
+              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+                {t("faqTitle")}
+              </h2>
+            </div>
+            <div>
+              <FaqAccordion
+                items={[
+                  { q: t("faq1Q"), a: t("faq1A") },
+                  { q: t("faq2Q"), a: t("faq2A") },
+                  { q: t("faq3Q"), a: t("faq3A") },
+                  { q: t("faq4Q"), a: t("faq4A") },
+                  { q: t("faq5Q"), a: t("faq5A") },
+                ]}
+              />
+            </div>
           </div>
         </div>
       </section>

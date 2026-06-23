@@ -74,7 +74,7 @@ export const Navbar = ({
                 className="flex items-center space-x-2"
                 prefetch={true}
               >
-                <Image src="/logo.svg" alt="Cloak logo" width={48} height={48} className="h-12 w-auto" />
+                <Image src="/logo.svg" alt="Cloak logo" width={48} height={48} className="h-12 w-auto dark:brightness-0 dark:invert" />
               </Link>
 
               <button
