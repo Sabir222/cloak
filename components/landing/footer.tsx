@@ -3,7 +3,7 @@
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@/components/ui/button";
+import { RoughButton } from "@/components/ui/rough-button";
 import { Link, usePathname } from "@/i18n/navigation";
 
 export function Footer({ showCta = true }: { showCta?: boolean }) {
@@ -24,24 +24,13 @@ export function Footer({ showCta = true }: { showCta?: boolean }) {
               {t("ctaDescription")}
             </p>
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/packs">
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  className="text-lg rounded-full px-8 h-12"
-                >
-                  {t("browsePacks")}
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link href="/agents">
-                <Button
-                  size="lg"
-                  className="text-lg rounded-full px-8 h-12 bg-white text-orange-600 hover:bg-white/90"
-                >
-                  {t("buildYourOwn")}
-                </Button>
-              </Link>
+              <RoughButton href="/packs" color="#fff" fill="#fff" className="text-orange-600">
+                {t("browsePacks")}
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </RoughButton>
+              <RoughButton href="/agents" color="#fff" fill="transparent">
+                {t("buildYourOwn")}
+              </RoughButton>
             </div>
           </div>
         </section>

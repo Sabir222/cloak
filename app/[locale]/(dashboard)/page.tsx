@@ -7,7 +7,7 @@ import { AgentCard, PackCard } from "@/components/landing/cards";
 import { FaqAccordion } from "@/components/landing/faq-accordion";
 import { ToolLogos } from "@/components/landing/tool-logos";
 import { MorphingText } from "@/components/ui/morphing-text";
-import { Button } from "@/components/ui/button";
+import { RoughButton } from "@/components/ui/rough-button";
 import { Link } from "@/i18n/navigation";
 import { getAllAgents, getAllPacks } from "@/lib/db/queries";
 
@@ -88,21 +88,13 @@ export default async function HomePage({
             {t("heroDescription")}
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/packs">
-              <Button size="lg" className="text-lg rounded-full px-8 h-12">
-                {t("browsePacks")}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            <Link href="/agents">
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-lg rounded-full px-8 h-12"
-              >
-                {t("buildYourOwn")}
-              </Button>
-            </Link>
+            <RoughButton href="/packs" color="#ea580c" fill="#fff7ed">
+              {t("browsePacks")}
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </RoughButton>
+            <RoughButton href="/agents" color="#ea580c" fill="transparent">
+              {t("buildYourOwn")}
+            </RoughButton>
           </div>
 
           <div className="mt-14 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-gray-400">
@@ -171,15 +163,10 @@ export default async function HomePage({
                         : ""
                     }
                     cta={
-                      <Link href={`/packs/${pack.slug}`} className="block">
-                        <Button
-                          className="w-full rounded-full"
-                          variant={i === 1 ? "default" : "outline"}
-                        >
-                          {tPricing("getPack")}
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </Link>
+                      <RoughButton href={`/packs/${pack.slug}`} color="#ea580c" fill={i === 1 ? '#fff7ed' : 'transparent'} className="w-full text-center">
+                        {tPricing("getPack")}
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </RoughButton>
                     }
                   />
                 </div>
@@ -224,12 +211,10 @@ export default async function HomePage({
             ))}
           </div>
           <div className="mt-10 text-center">
-            <Link href="/agents">
-              <Button variant="outline" className="rounded-full">
-                {t("browseAllAgents")}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
+            <RoughButton href="/agents" color="#ea580c" fill="transparent">
+              {t("browseAllAgents")}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </RoughButton>
           </div>
         </div>
       </section>
