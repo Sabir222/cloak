@@ -1,7 +1,57 @@
 {
   "Metadata": {
-    "title": "Next.js SaaS Starter",
-    "description": "Get started quickly with Next.js, Postgres, and Stripe."
+    "title": "Trove",
+    "description": "Download specialized AI agent packs for Claude Code, Cursor, Windsurf, and more. One-time payment, instant download, no subscription."
+  },
+  "seo": {
+    "home": {
+      "title": "Trove",
+      "description": "Download specialized AI agent packs for Claude Code, Cursor, Windsurf, and more. One-time payment, instant download, no subscription."
+    },
+    "pricing": {
+      "title": "Pricing",
+      "description": "Buy curated AI agent packs with a single one-time payment. No subscriptions, no recurring fees. Instant download after purchase."
+    },
+    "packs": {
+      "title": "Agent Packs",
+      "description": "Browse our curated bundles of themed AI agents. Each pack is designed to work together so you can deploy a full team in minutes."
+    },
+    "agents": {
+      "title": "Build Your Own",
+      "description": "Mix and match individual AI agents to create a custom pack tailored to your workflow. $5 per agent."
+    },
+    "signIn": {
+      "title": "Sign In",
+      "description": "Sign in to your Trove account to access your purchased agent packs and downloads."
+    },
+    "signUp": {
+      "title": "Create Account",
+      "description": "Create your Trove account to purchase and download AI agent packs."
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Manage your Trove account, team settings, and purchased agent packs."
+    },
+    "activity": {
+      "title": "Activity Log",
+      "description": "View your recent account activity including sign-ins, password changes, and team updates."
+    },
+    "general": {
+      "title": "General Settings",
+      "description": "Update your account name and email settings."
+    },
+    "security": {
+      "title": "Security Settings",
+      "description": "Update your password and manage account security settings."
+    },
+    "purchases": {
+      "title": "Purchase History",
+      "description": "View your past purchases and download your AI agents."
+    },
+    "notFound": {
+      "title": "Page Not Found",
+      "description": "The page you are looking for might have been removed, renamed, or is temporarily unavailable."
+    }
   },
   "nav": {
     "products": "Products",

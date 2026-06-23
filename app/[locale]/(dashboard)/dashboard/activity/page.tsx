@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import {
   Settings,
@@ -61,6 +62,19 @@ function formatAction(action: ActivityType, t: TranslationFunc): string {
   ];
   if (known.includes(key)) return t(key);
   return t('actions.UNKNOWN');
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'seo' });
+  return {
+    title: t('activity.title'),
+    description: t('activity.description'),
+  };
 }
 
 export default async function ActivityPage({

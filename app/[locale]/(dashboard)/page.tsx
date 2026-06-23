@@ -1,14 +1,28 @@
+import type { Metadata } from "next";
 import { ArrowRight, Check } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AnimatedStats } from "@/components/landing/animated-stats";
 import { HowItWorksSection } from "@/components/landing/how-it-works";
-import { AgentCard, PackCard, TestimonialCard } from "@/components/landing/cards";
+import { AgentCard, PackCard } from "@/components/landing/cards";
 import { FaqAccordion } from "@/components/landing/faq-accordion";
 import { ToolLogos } from "@/components/landing/tool-logos";
 import { MorphingText } from "@/components/ui/morphing-text";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { getAllAgents, getAllPacks } from "@/lib/db/queries";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "seo" });
+  return {
+    title: t("home.title"),
+    description: t("home.description"),
+  };
+}
 
 export default async function HomePage({
   params,
@@ -216,38 +230,6 @@ export default async function HomePage({
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Testimonials ─── */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-              {t("testimonialsTitle")}
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                name: t("testimonial1Name"),
-                role: t("testimonial1Role"),
-                text: t("testimonial1Text"),
-              },
-              {
-                name: t("testimonial2Name"),
-                role: t("testimonial2Role"),
-                text: t("testimonial2Text"),
-              },
-              {
-                name: t("testimonial3Name"),
-                role: t("testimonial3Role"),
-                text: t("testimonial3Text"),
-              },
-            ].map(({ name, role, text }) => (
-              <TestimonialCard key={name} name={name} role={role} text={text} />
-            ))}
           </div>
         </div>
       </section>

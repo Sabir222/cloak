@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ArrowRight, Package, Sparkles } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PackCard as PackCardComponent } from "@/components/landing/cards";
@@ -6,6 +7,19 @@ import { Link } from "@/i18n/navigation";
 import { getAllPacks } from "@/lib/db/queries";
 
 export const revalidate = 3600;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "seo" });
+  return {
+    title: t("pricing.title"),
+    description: t("pricing.description"),
+  };
+}
 
 export default async function PricingPage({
 	params,

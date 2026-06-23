@@ -73,9 +73,9 @@ export function PackCard({
 			)}
 			{...magicProps}
 		>
-			<div className="relative flex flex-col flex-1 p-6">
+			<div className="flex flex-col flex-1 p-6">
 				{badge && (
-					<span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-orange-500 text-white text-xs font-semibold whitespace-nowrap z-50">
+					<span className="relative -mt-3 mb-3 mx-auto w-fit px-4 py-1 rounded-full bg-orange-500 text-white text-xs font-semibold whitespace-nowrap z-50">
 						{badge}
 					</span>
 				)}
@@ -107,7 +107,7 @@ export function PackCard({
 				) : (
 					<>
 						<h3 className="font-lora text-xl font-bold text-gray-900">{name}</h3>
-						<p className="mt-2 text-sm text-gray-500 flex-1">{description}</p>
+						<p className="mt-2 text-sm text-gray-500 line-clamp-3 flex-1">{description}</p>
 						<div className="mt-6 flex items-end gap-1">
 							<span className="font-lora text-4xl font-bold text-gray-900">
 								${(priceCents / 100).toFixed(0)}
@@ -119,7 +119,7 @@ export function PackCard({
 								? t.skillPackContent
 								: `${agentCount} ${t.agentsIncluded}`}
 						</div>
-						{cta && <div className="mt-6">{cta}</div>}
+						{cta && <div className="mt-auto pt-6">{cta}</div>}
 					</>
 				)}
 			</div>

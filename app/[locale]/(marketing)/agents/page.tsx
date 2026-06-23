@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { getAllAgents } from '@/lib/db/queries';
@@ -6,6 +7,19 @@ import {
   type AgentSummary,
   type AgentsByDivision
 } from './agent-browser';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "seo" });
+  return {
+    title: t("agents.title"),
+    description: t("agents.description"),
+  };
+}
 
 export default async function AgentsPage({
   params

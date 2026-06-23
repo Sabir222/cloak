@@ -1,8 +1,22 @@
+import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PackCard } from "@/components/landing/cards";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { getAllPacks } from "@/lib/db/queries";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "seo" });
+  return {
+    title: t("packs.title"),
+    description: t("packs.description"),
+  };
+}
 
 export default async function PacksPage({
 	params,

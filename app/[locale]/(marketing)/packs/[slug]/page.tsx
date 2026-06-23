@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ArrowLeft, BookOpen, Check, Terminal, Users, Zap } from "lucide-react";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -7,8 +8,25 @@ import { Link } from "@/i18n/navigation";
 import { getPackBySlug } from "@/lib/db/queries";
 import { BuyButton } from "./buy-button";
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const pack = await getPackBySlug(slug);
+  if (!pack) {
+    const t = await getTranslations({ locale, namespace: "seo" });
+    return { title: t("notFound.title") };
+  }
+  return {
+    title: pack.name,
+    description: pack.description ?? undefined,
+  };
+}
+
 export function generateStaticParams() {
-	return [{ locale: "en" }, { locale: "fr" }];
+  return [{ locale: "en" }, { locale: "fr" }];
 }
 
 const SKILL_PACK_CONTENT = {

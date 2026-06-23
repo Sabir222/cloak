@@ -1,6 +1,11 @@
 'use client';
 
+import type { Metadata } from 'next';
 import { useTranslations } from 'next-intl';
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+};
 import { useActionState } from 'react';
 import useSWR from 'swr';
 import { Suspense } from 'react';

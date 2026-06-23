@@ -1,7 +1,57 @@
 {
   "Metadata": {
-    "title": "Next.js SaaS Starter",
-    "description": "Démarrez rapidement avec Next.js, Postgres et Stripe."
+    "title": "Trove",
+    "description": "Téléchargez des packs d'agents IA spécialisés pour Claude Code, Cursor, Windsurf et plus. Paiement unique, téléchargement instantané, sans abonnement."
+  },
+  "seo": {
+    "home": {
+      "title": "Trove",
+      "description": "Téléchargez des packs d'agents IA spécialisés pour Claude Code, Cursor, Windsurf et plus. Paiement unique, téléchargement instantané, sans abonnement."
+    },
+    "pricing": {
+      "title": "Tarifs",
+      "description": "Achetez des packs d'agents IA curatis avec un seul paiement unique. Pas d'abonnement, pas de frais récurrents. Téléchargement instantané après l'achat."
+    },
+    "packs": {
+      "title": "Packs d'Agents",
+      "description": "Parcourez nos sélections d'agents IA thématiques. Chaque pack est conçu pour fonctionner ensemble afin que vous puissiez déployer une équipe complète en quelques minutes."
+    },
+    "agents": {
+      "title": "Composez le vôtre",
+      "description": "Mixez et associez des agents IA individuels pour créer un pack sur mesure adapté à votre workflow. 5 $ par agent."
+    },
+    "signIn": {
+      "title": "Connexion",
+      "description": "Connectez-vous à votre compte Trove pour accéder à vos packs d'agents et téléchargements."
+    },
+    "signUp": {
+      "title": "Créer un compte",
+      "description": "Créez votre compte Trove pour acheter et télécharger des packs d'agents IA."
+    },
+    "dashboard": {
+      "title": "Tableau de bord",
+      "description": "Gérez votre compte Trove, les paramètres d'équipe et vos packs d'agents achetés."
+    },
+    "activity": {
+      "title": "Journal d'activité",
+      "description": "Consultez votre activité récente, y compris les connexions, les changements de mot de passe et les mises à jour d'équipe."
+    },
+    "general": {
+      "title": "Paramètres généraux",
+      "description": "Mettez à jour votre nom et votre adresse e-mail."
+    },
+    "security": {
+      "title": "Paramètres de sécurité",
+      "description": "Mettez à jour votre mot de passe et gérez les paramètres de sécurité de votre compte."
+    },
+    "purchases": {
+      "title": "Historique d'achats",
+      "description": "Consultez vos achats passés et téléchargez vos agents IA."
+    },
+    "notFound": {
+      "title": "Page introuvable",
+      "description": "La page que vous recherchez a peut-être été supprimée, renommée ou est temporairement indisponible."
+    }
   },
   "nav": {
     "products": "Produits",

@@ -20,8 +20,16 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: 'Metadata' });
 
   return {
-    title: t('title'),
-    description: t('description')
+    title: {
+      template: '%s | Trove',
+      default: t('title')
+    },
+    description: t('description'),
+    openGraph: {
+      siteName: 'Trove',
+      type: 'website',
+      locale
+    }
   };
 }
 

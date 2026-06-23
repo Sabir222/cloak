@@ -1,6 +1,11 @@
 'use client';
 
+import type { Metadata } from 'next';
 import { useTranslations } from 'next-intl';
+
+export const metadata: Metadata = {
+  title: 'Security Settings',
+};
 import { useActionState } from 'react';
 import { Lock, Trash2, Loader2 } from 'lucide-react';
 

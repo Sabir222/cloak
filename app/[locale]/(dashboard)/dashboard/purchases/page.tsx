@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { AlertCircle, Download } from "lucide-react";
 import { redirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -5,6 +6,19 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShineBorder } from "@/components/ui/shine-border";
 import { getPurchasesByUser, getUser } from "@/lib/db/queries";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "seo" });
+  return {
+    title: t("purchases.title"),
+    description: t("purchases.description"),
+  };
+}
 
 export default async function PurchasesPage({
 	params,
