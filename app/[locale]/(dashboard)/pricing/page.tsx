@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { ArrowRight, Package, Sparkles } from "lucide-react";
+import { Package } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PackCard as PackCardComponent } from "@/components/landing/cards";
-import { Button } from "@/components/ui/button";
-import { Link } from "@/i18n/navigation";
 import { getAllPacks } from "@/lib/db/queries";
 
 export const revalidate = 3600;
@@ -65,21 +63,6 @@ export default async function PricingPage({
 				</div>
 			)}
 
-			<div className="mt-16 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 p-8 sm:p-12 text-center">
-				<Sparkles className="h-10 w-10 text-white mx-auto mb-4" />
-				<h2 className="text-2xl font-bold text-white sm:text-3xl">
-					{t("customTitle")}
-				</h2>
-				<p className="mt-3 text-white/90 max-w-xl mx-auto">
-					{t("customDescription")}
-				</p>
-				<Link href="/agents" className="inline-block mt-6">
-					<Button size="lg" variant="secondary" className="rounded-full">
-						{t("customButton")}
-						<ArrowRight className="ml-2 h-5 w-5" />
-					</Button>
-				</Link>
-			</div>
 		</main>
 	);
 }

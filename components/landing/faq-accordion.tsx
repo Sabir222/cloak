@@ -27,7 +27,7 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
         <AccordionItem
           key={i}
           value={`faq-${i}`}
-          className="py-2 border-b border-gray-200 last:border-b-0"
+          className="py-2"
         >
           <AccordionTrigger className="w-full py-3 text-left text-gray-900">
             <div className="flex items-center">

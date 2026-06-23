@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { ArrowRight, Check } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { RoughBorder } from "@/components/ui/rough-border";
 import { AnimatedStats } from "@/components/landing/animated-stats";
 import { HowItWorksSection } from "@/components/landing/how-it-works";
 import { AgentCard, PackCard } from "@/components/landing/cards";
@@ -252,59 +251,19 @@ export default async function HomePage({
                 {t("faqTitle")}
               </h2>
             </div>
-            <RoughBorder
-              color="#d1d5db"
-              strokeWidth={2.5}
-              borderRadius={16}
-              padding="p-6 md:p-8"
-              roughness={2}
-              bowing={1}
-            >
-              <FaqAccordion
-                items={[
-                  { q: t("faq1Q"), a: t("faq1A") },
-                  { q: t("faq2Q"), a: t("faq2A") },
-                  { q: t("faq3Q"), a: t("faq3A") },
-                  { q: t("faq4Q"), a: t("faq4A") },
-                  { q: t("faq5Q"), a: t("faq5A") },
-                ]}
-              />
-            </RoughBorder>
+            <FaqAccordion
+              items={[
+                { q: t("faq1Q"), a: t("faq1A") },
+                { q: t("faq2Q"), a: t("faq2A") },
+                { q: t("faq3Q"), a: t("faq3A") },
+                { q: t("faq4Q"), a: t("faq4A") },
+                { q: t("faq5Q"), a: t("faq5A") },
+              ]}
+            />
           </div>
         </div>
       </section>
 
-      {/* ─── Final CTA ─── */}
-      <section className="py-20 bg-gradient-to-br from-orange-500 to-orange-600">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
-            {t("ctaTitle")}
-          </h2>
-          <p className="mt-4 text-lg text-white/90 max-w-2xl mx-auto">
-            {t("ctaDescription")}
-          </p>
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/packs">
-              <Button
-                size="lg"
-                variant="secondary"
-                className="text-lg rounded-full px-8 h-12"
-              >
-                {t("browsePacks")}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            <Link href="/agents">
-              <Button
-                size="lg"
-                className="text-lg rounded-full px-8 h-12 bg-white text-orange-600 hover:bg-white/90"
-              >
-                {t("buildYourOwn")}
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
     </main>
   );
 }
