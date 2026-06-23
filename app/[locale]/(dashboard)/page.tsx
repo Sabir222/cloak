@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ArrowRight, Check } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { HandDrawnBorder } from "@/components/ui/hand-drawn-border";
 import { AnimatedStats } from "@/components/landing/animated-stats";
 import { HowItWorksSection } from "@/components/landing/how-it-works";
 import { AgentCard, PackCard } from "@/components/landing/cards";
@@ -251,7 +252,14 @@ export default async function HomePage({
                 {t("faqTitle")}
               </h2>
             </div>
-            <div>
+            <HandDrawnBorder
+              color="#d1d5db"
+              strokeWidth={2.5}
+              borderRadius={16}
+              padding="p-6 md:p-8"
+              sketchAmount={3}
+              doubleLine
+            >
               <FaqAccordion
                 items={[
                   { q: t("faq1Q"), a: t("faq1A") },
@@ -261,7 +269,7 @@ export default async function HomePage({
                   { q: t("faq5Q"), a: t("faq5A") },
                 ]}
               />
-            </div>
+            </HandDrawnBorder>
           </div>
         </div>
       </section>
