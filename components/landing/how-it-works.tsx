@@ -4,8 +4,8 @@ import { useRef } from "react"
 import Image from "next/image"
 import { useTranslations } from "next-intl"
 import { Package, CreditCard } from "lucide-react"
-import { AnimatedBeam } from "@/components/ui/animated-beam"
-import { cn } from "@/lib/utils"
+import { RoughBeam } from "@/components/ui/rough-beam"
+import { RoughCircle } from "@/components/ui/rough-circle"
 
 const TOOLS = [
   { name: "Claude Code", domain: "anthropic.com" },
@@ -16,28 +16,6 @@ const TOOLS = [
   { name: "OpenCode", domain: "opencode.ai" },
   { name: "OpenClaw", domain: "openclaw.ai" },
 ]
-
-function Circle({
-  ref,
-  className,
-  children,
-}: {
-  className?: string
-  children?: React.ReactNode
-  ref?: React.RefObject<HTMLDivElement | null>
-}) {
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        "group relative z-10 flex size-10 items-center justify-center rounded-full border-2 bg-white p-2 shadow-lg shadow-black/5 backdrop-blur-sm dark:bg-black dark:border-neutral-800",
-        className,
-      )}
-    >
-      {children}
-    </div>
-  )
-}
 
 export function HowItWorksSection() {
   const t = useTranslations("landing")
@@ -74,20 +52,20 @@ export function HowItWorksSection() {
             ref={containerRef}
           >
             <div className="absolute left-0 md:left-10 top-1/2 -translate-y-1/2 z-10">
-              <Circle ref={leftRef}>
+              <RoughCircle ref={leftRef} className="size-10" fill="#F9FAFB">
                 <Package className="text-orange-500 size-4" />
-              </Circle>
+              </RoughCircle>
             </div>
 
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-              <Circle ref={centerRef} className="size-12 border-orange-300 bg-orange-50">
+              <RoughCircle ref={centerRef} className="size-12" fill="#F9FAFB">
                 <CreditCard className="size-5 text-orange-500" />
-              </Circle>
+              </RoughCircle>
             </div>
 
             <div className="absolute right-0 md:right-10 top-1/2 -translate-y-1/2 flex flex-col items-center gap-3 z-10">
               {TOOLS.map((tool, i) => (
-                <Circle key={tool.name} ref={rightRefs[i]}>
+                <RoughCircle key={tool.name} ref={rightRefs[i]} className="size-10">
                   <Image
                     src={`https://img.logo.dev/${tool.domain}?token=pk_euSmmEzBSfCQ-Ji0YuzmaQ`}
                     alt={tool.name}
@@ -95,22 +73,22 @@ export function HowItWorksSection() {
                     height={16}
                     className="size-4 object-contain"
                   />
-                </Circle>
+                </RoughCircle>
               ))}
             </div>
 
-            <AnimatedBeam
+            <RoughBeam
               containerRef={containerRef}
               fromRef={leftRef}
               toRef={centerRef}
               gradientStartColor="#f97316"
               gradientStopColor="#f97316"
               pathColor="#f97316"
-              pathOpacity={0.15}
+              pathWidth={2}
             />
 
             {rightRefs.map((ref, i) => (
-              <AnimatedBeam
+              <RoughBeam
                 key={i}
                 containerRef={containerRef}
                 fromRef={centerRef}
@@ -119,7 +97,7 @@ export function HowItWorksSection() {
                 gradientStartColor="#f97316"
                 gradientStopColor="#f97316"
                 pathColor="#f97316"
-                pathOpacity={0.15}
+                pathWidth={2}
               />
             ))}
           </div>
