@@ -2,6 +2,7 @@
 
 import { Check, Loader2, Search, ShoppingCart, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState, useTransition } from "react";
+import { useLocale } from "next-intl";
 import { buyCustomAgents } from "@/app/[locale]/(marketing)/actions";
 import { AgentCard } from "@/components/landing/cards";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,20 @@ export type AgentsByDivision = Record<string, AgentSummary[]>;
 const CART_KEY = "agent-cart";
 const PRICE_PER_AGENT_CENTS = 500;
 
+const TIERS = [
+  { min: 0, max: 9, price: 500, label: "$5/agent" },
+  { min: 10, max: 19, price: 400, label: "$4/agent", discount: "20% off" },
+  { min: 20, max: 29, price: 350, label: "$3.50/agent", discount: "30% off" },
+  { min: 30, max: Infinity, price: 300, label: "$3/agent", discount: "40% off" },
+] as const;
+
+function getTier(count: number) {
+  for (const tier of TIERS) {
+    if (count >= tier.min && count <= tier.max) return tier;
+  }
+  return TIERS[0];
+}
+
 type AgentBrowserProps = {
 	agentsByDivision: AgentsByDivision;
 	translations: {
@@ -33,6 +48,9 @@ type AgentBrowserProps = {
 		perAgent: string;
 		checkingOut: string;
 		agentsCount: string;
+		tier2Discount: string;
+		tier3Discount: string;
+		tier4Discount: string;
 	};
 };
 
@@ -40,6 +58,7 @@ export function AgentBrowser({
 	agentsByDivision,
 	translations,
 }: AgentBrowserProps) {
+	const locale = useLocale();
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
 	const [query, setQuery] = useState("");
 	const [isPending, startTransition] = useTransition();
@@ -90,7 +109,20 @@ export function AgentBrowser({
 	const hasResults = Object.keys(filtered).length > 0;
 	const totalCount = allAgents.length;
 	const selectedCount = selectedIds.length;
-	const totalCents = selectedCount * PRICE_PER_AGENT_CENTS;
+	const tier = getTier(selectedCount);
+	const totalCents = selectedCount * tier.price;
+	const savings = selectedCount > 0
+		? selectedCount * PRICE_PER_AGENT_CENTS - totalCents
+		: 0;
+
+	const discountLabel =
+		selectedCount >= 30
+			? translations.tier4Discount
+			: selectedCount >= 20
+				? translations.tier3Discount
+				: selectedCount >= 10
+					? translations.tier2Discount
+					: null;
 
 	function toggleAgent(id: number) {
 		setSelectedIds((prev) =>
@@ -174,13 +206,25 @@ export function AgentBrowser({
 						<div>
 							<p className="text-sm text-gray-500">
 								{translations.selected}: {selectedCount} / {totalCount}
+								{discountLabel && (
+									<span className="ml-2 inline-block rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700">
+										{discountLabel}
+									</span>
+								)}
 							</p>
 							<p className="text-lg font-semibold text-gray-900">
 								{translations.total}: ${(totalCents / 100).toFixed(0)}{" "}
 								<span className="text-sm font-normal text-gray-500">
-									({translations.perAgent})
+									({tier.label})
 								</span>
 							</p>
+							{savings > 0 && (
+								<p className="text-xs text-green-600">
+									{translations.total === "Total"
+										? `You save $${(savings / 100).toFixed(0)}`
+										: `Vous économisez $${(savings / 100).toFixed(0)}`}
+								</p>
+							)}
 						</div>
 						<div className="flex items-center space-x-2">
 							<Button
