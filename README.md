@@ -1,5 +1,7 @@
 # Next.js SaaS Starter
 
+[![Polar.sh](https://polar.sh/embed/funding-vector.svg)](https://polar.sh/nextjs/saas-starter)
+
 This is a starter template for building a SaaS application using **Next.js** with support for authentication, Stripe integration for payments, and a dashboard for logged-in users.
 
 **Demo: [https://next-saas-start.vercel.app/](https://next-saas-start.vercel.app/)**
@@ -21,7 +23,7 @@ This is a starter template for building a SaaS application using **Next.js** wit
 - **Framework**: [Next.js](https://nextjs.org/)
 - **Database**: [Postgres](https://www.postgresql.org/)
 - **ORM**: [Drizzle](https://orm.drizzle.team/)
-- **Payments**: [Stripe](https://stripe.com/)
+- **Payments**: [Stripe](https://stripe.com/) + [Polar.sh](https://polar.sh/) (optional)
 - **UI Library**: [shadcn/ui](https://ui.shadcn.com/)
 
 ## Getting Started
@@ -107,6 +109,40 @@ In your Vercel project settings (or during deployment), add all the necessary en
 3. `STRIPE_WEBHOOK_SECRET`: Use the webhook secret from the production webhook you created in step 1.
 4. `POSTGRES_URL`: Set this to your production database URL.
 5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
+
+## Polar.sh Integration (Optional)
+
+This project includes optional [Polar.sh](https://polar.sh) integration for alternative payment processing, subscriptions, and customer portal.
+
+### Setup
+
+1. Create a [Polar.sh](https://polar.sh) account and organization
+2. Generate an Organization Access Token from your organization settings
+3. Set up webhooks in Polar dashboard pointing to `https://yourdomain.com/api/polar/webhook`
+4. Add the following environment variables:
+
+```bash
+POLAR_ACCESS_TOKEN=polar_oat_xxx
+POLAR_WEBHOOK_SECRET=whsec_xxx
+POLAR_ENVIRONMENT=sandbox  # Change to 'production' when live
+```
+
+### Testing locally with Polar webhooks
+
+```bash
+# Use ngrok to tunnel webhooks to your local dev server
+ngrok http 3000
+```
+
+Then configure your Polar webhook endpoint URL to `https://<your-ngrok-id>.ngrok-free.app/api/polar/webhook`.
+
+### Available routes
+
+| Route | Description |
+|---|---|
+| `/api/polar/checkout?products=<id>` | Create a Polar checkout session |
+| `/api/polar/portal` | Customer portal for orders & subscriptions |
+| `/api/polar/webhook` | Webhook handler for Polar events |
 
 ## Other Templates
 

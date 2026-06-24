@@ -2,7 +2,7 @@
 
 import { useLocale } from 'next-intl';
 import { useTransition } from 'react';
-import { Globe, Check } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 import { usePathname, useRouter } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
@@ -35,23 +35,25 @@ export function LanguageSwitcher({ className }: { className?: string }) {
     <DropdownMenu>
       <DropdownMenuTrigger
         className={cn(
-          'inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors p-1.5 rounded-md hover:bg-muted/50',
+          'inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors',
           className
         )}
         aria-label="Language"
       >
-        <Globe className="size-4" />
         <span className="uppercase">{locale}</span>
+        <ChevronDown className="size-3 text-muted-foreground/40" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-[120px]">
+      <DropdownMenuContent align="end" className="min-w-[100px]">
         {routing.locales.map((l) => (
           <DropdownMenuItem
             key={l}
             onClick={() => switchTo(l)}
-            className="cursor-pointer justify-between"
+            className={cn(
+              'cursor-pointer text-xs uppercase tracking-wider',
+              l === locale && 'font-medium text-orange-500'
+            )}
           >
-            <span>{LOCALE_LABELS[l]}</span>
-            {l === locale && <Check className="size-4 text-orange-500" />}
+            {LOCALE_LABELS[l]}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
