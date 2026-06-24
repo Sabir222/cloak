@@ -18,6 +18,7 @@ interface RoughBeamProps {
   gradientStopColor?: string
   delay?: number
   duration?: number
+  repeatDelay?: number
   startXOffset?: number
   startYOffset?: number
   endXOffset?: number
@@ -36,6 +37,7 @@ export function RoughBeam({
   gradientStopColor = "#9c40ff",
   delay = 0,
   duration = 5,
+  repeatDelay = 0,
   startXOffset = 0,
   startYOffset = 0,
   endXOffset = 0,
@@ -145,7 +147,7 @@ export function RoughBeam({
             duration,
             ease: [0.16, 1, 0.3, 1],
             repeat: Infinity,
-            repeatDelay: 0,
+            repeatDelay,
           }}
         >
           <stop stopColor={gradientStartColor} stopOpacity="0"></stop>

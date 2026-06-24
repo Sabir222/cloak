@@ -17,6 +17,16 @@ const TOOLS = [
   { name: "OpenClaw", domain: "openclaw.ai" },
 ]
 
+const BEAM_COLORS = [
+  { start: "#a855f7", stop: "#d8b4fe" }, // purple
+  { start: "#3b82f6", stop: "#93c5fd" }, // blue
+  { start: "#14b8a6", stop: "#5eead4" }, // teal
+  { start: "#22c55e", stop: "#86efac" }, // green
+  { start: "#eab308", stop: "#fde047" }, // yellow
+  { start: "#ec4899", stop: "#f9a8d4" }, // pink
+  { start: "#6366f1", stop: "#a5b4fc" }, // indigo
+]
+
 export function HowItWorksSection() {
   const t = useTranslations("landing")
   const containerRef = useRef<HTMLDivElement>(null)
@@ -85,6 +95,9 @@ export function HowItWorksSection() {
               gradientStopColor="#f97316"
               pathColor="#f97316"
               pathWidth={0.8}
+              delay={0.5}
+              duration={3}
+              repeatDelay={4}
             />
 
             {rightRefs.map((ref, i) => (
@@ -94,10 +107,13 @@ export function HowItWorksSection() {
                 fromRef={centerRef}
                 toRef={ref}
                 curvature={(i - 2.5) * 20}
-                gradientStartColor="#f97316"
-                gradientStopColor="#f97316"
+                gradientStartColor={BEAM_COLORS[i].start}
+                gradientStopColor={BEAM_COLORS[i].stop}
                 pathColor="#f97316"
                 pathWidth={0.8}
+                delay={1 + i * 0.6}
+                duration={3 + i * 0.3}
+                repeatDelay={5 + i * 0.8}
               />
             ))}
           </div>

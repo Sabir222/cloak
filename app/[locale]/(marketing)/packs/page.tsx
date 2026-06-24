@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PackCard } from "@/components/landing/cards";
-import { Button } from "@/components/ui/button";
-import { Link } from "@/i18n/navigation";
+import { RoughButton } from "@/components/ui/rough-button";
 import { getAllPacks } from "@/lib/db/queries";
 
 export async function generateMetadata({
@@ -49,19 +48,24 @@ export default async function PacksPage({
 						agentCount={pack.agentCount}
 						bundleType={pack.bundleType}
 						isFeatured={pack.isFeatured}
+						badge={pack.isFeatured ? t("popular") : undefined}
+						variant="pricing"
 						translations={{
 							oneTime: t("oneTime"),
 							agentsIncluded: t("agentsIncluded"),
 							skillPackContent: t("skillPackContent"),
 							getPack: t("getPack"),
 							popular: t("popular"),
-							from: t("from"),
-							viewPack: t("viewPack"),
 						}}
 						cta={
-							<Button asChild variant="outline" className="w-full rounded-full">
-								<Link href={`/packs/${pack.slug}`}>{t("viewPack")}</Link>
-							</Button>
+							<RoughButton
+								href={`/packs/${pack.slug}`}
+								color="#ea580c"
+								fill={pack.isFeatured ? "#fff7ed" : "transparent"}
+								className="w-full text-center text-sm"
+							>
+								{t("getPack")}
+							</RoughButton>
 						}
 					/>
 				))}
