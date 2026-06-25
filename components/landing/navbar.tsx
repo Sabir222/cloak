@@ -47,6 +47,7 @@ export const Navbar = ({
   if (isHidden) return null;
 
   const navLinks = [
+    { href: '/skills', label: t('skillsNav') },
     { href: '/packs', label: t('packs') },
     { href: '/agents', label: t('agentsNav') },
     { href: '/pricing', label: t('pricing') }
