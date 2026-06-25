@@ -192,6 +192,76 @@ export async function createPackCheckoutSession({
   return session.url!;
 }
 
+export async function createSkillCheckoutSession({
+  userId,
+  skillId,
+  priceId,
+  amountCents,
+  downloadToken
+}: {
+  userId: number;
+  skillId: number;
+  priceId: string;
+  amountCents: number;
+  downloadToken: string;
+}) {
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price: priceId,
+        quantity: 1
+      }
+    ],
+    mode: 'payment',
+    success_url: `${process.env.BASE_URL}/api/stripe/checkout?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.BASE_URL}/skills`,
+    client_reference_id: userId.toString(),
+    metadata: {
+      purchase_type: 'skill',
+      skill_id: skillId.toString(),
+      download_token: downloadToken
+    }
+  });
+
+  return session.url!;
+}
+
+export async function createAgentProductCheckoutSession({
+  userId,
+  agentProductId,
+  priceId,
+  amountCents,
+  downloadToken
+}: {
+  userId: number;
+  agentProductId: number;
+  priceId: string;
+  amountCents: number;
+  downloadToken: string;
+}) {
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price: priceId,
+        quantity: 1
+      }
+    ],
+    mode: 'payment',
+    success_url: `${process.env.BASE_URL}/api/stripe/checkout?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.BASE_URL}/agents`,
+    client_reference_id: userId.toString(),
+    metadata: {
+      purchase_type: 'agent',
+      agent_product_id: agentProductId.toString(),
+      download_token: downloadToken
+    }
+  });
+
+  return session.url!;
+}
+
 export async function createCustomCheckoutSession({
   userId,
   agentCount,
@@ -235,6 +305,8 @@ export async function handlePackPayment(session: Stripe.Checkout.Session) {
   const purchaseType = session.metadata?.purchase_type;
   const packId = session.metadata?.pack_id;
   const agentIds = session.metadata?.agent_ids;
+  const skillId = session.metadata?.skill_id;
+  const agentProductId = session.metadata?.agent_product_id;
   const downloadToken = session.metadata?.download_token;
 
   let userEmail: string | undefined;
@@ -255,7 +327,9 @@ export async function handlePackPayment(session: Stripe.Checkout.Session) {
     userEmail: userEmail!,
     purchaseType: purchaseType!,
     packId: packId ? Number(packId) : undefined,
-    agentIds: agentIds ? agentIds.split(',').map(Number) : undefined
+    agentIds: agentIds ? agentIds.split(',').map(Number) : undefined,
+    skillId: skillId ? Number(skillId) : undefined,
+    agentProductId: agentProductId ? Number(agentProductId) : undefined
   };
 }
 

@@ -45,14 +45,15 @@ export default async function PacksPage({
 						name={pack.name}
 						description={pack.description}
 						priceCents={pack.priceCents}
-						agentCount={pack.agentCount}
+						personaCount={pack.personaCount}
+						skillCount={pack.skillCount}
 						bundleType={pack.bundleType}
 						isFeatured={pack.isFeatured}
 						badge={pack.isFeatured ? t("popular") : undefined}
 						variant="pricing"
 						translations={{
 							oneTime: t("oneTime"),
-							agentsIncluded: t("agentsIncluded"),
+							personasIncluded: t("personasIncluded"),
 							skillPackContent: t("skillPackContent"),
 							getPack: t("getPack"),
 							popular: t("popular"),

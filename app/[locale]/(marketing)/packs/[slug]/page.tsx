@@ -113,9 +113,9 @@ export default async function PackDetailPage({
 	}
 
 	const isSkillPack = pack.bundleType === "skill-pack";
-	const perAgent =
-		!isSkillPack && pack.agents.length > 0
-			? Math.round(pack.priceCents / 100 / pack.agents.length)
+	const perPersona =
+		!isSkillPack && pack.personas.length > 0
+			? Math.round(pack.priceCents / 100 / pack.personas.length)
 			: null;
 
 	return (
@@ -144,9 +144,9 @@ export default async function PackDetailPage({
 						<span className="text-3xl font-semibold text-gray-900">
 							${pack.priceCents / 100}
 						</span>
-						{perAgent !== null && (
+						{perPersona !== null && (
 							<span className="mt-1 text-xs text-gray-500">
-								≈ ${perAgent} {t("perAgent")}
+								≈ ${perPersona} {t("perPersona")}
 							</span>
 						)}
 						<div className="mt-4">
@@ -270,12 +270,12 @@ export default async function PackDetailPage({
 			) : (
 				<>
 					<h2 className="text-xl font-semibold text-gray-900 mb-4">
-						{t("agentsIncluded")}
+						{t("personasIncluded")}
 					</h2>
 					<ul className="grid sm:grid-cols-2 gap-4">
-						{pack.agents.map((agent) => (
+						{pack.personas.map((persona) => (
 							<li
-								key={agent.id}
+								key={persona.id}
 								className="relative overflow-hidden rounded-lg bg-white p-4"
 							>
 								<ShineBorder
@@ -284,18 +284,18 @@ export default async function PackDetailPage({
 									duration={20}
 								/>
 								<div className="relative z-10 flex items-start space-x-3">
-									<span className="text-2xl">{agent.emoji}</span>
+									<span className="text-2xl">{persona.emoji}</span>
 									<div className="flex-1">
 										<div className="flex items-center justify-between gap-2">
 											<h3 className="font-medium text-gray-900">
-												{agent.name}
+												{persona.name}
 											</h3>
 											<span className="inline-flex items-center rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-medium text-orange-700">
-												{agent.division}
+												{persona.division}
 											</span>
 										</div>
 										<p className="mt-1 text-sm text-gray-500">
-											{agent.description}
+											{persona.description}
 										</p>
 									</div>
 								</div>

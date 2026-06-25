@@ -1,11 +1,11 @@
 import { db } from './drizzle';
-import { agents, packs, packAgents } from './schema';
+import { personas, packs, packPersonas } from './schema';
 import { stripe } from '../payments/stripe';
-import { eq } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-interface CatalogAgent {
+interface CatalogPersona {
   slug: string;
   name: string;
   description: string;
@@ -25,7 +25,7 @@ interface CatalogPack {
 }
 
 interface Catalog {
-  agents: CatalogAgent[];
+  agents: CatalogPersona[];
   packs: CatalogPack[];
 }
 
@@ -33,24 +33,24 @@ async function seedPacks() {
   const catalogPath = join(process.cwd(), 'data', 'catalog.json');
   const catalog: Catalog = JSON.parse(readFileSync(catalogPath, 'utf-8'));
 
-  console.log(`Catalog: ${catalog.agents.length} agents, ${catalog.packs.length} packs`);
+  console.log(`Catalog: ${catalog.agents.length} personas, ${catalog.packs.length} packs`);
 
-  const existingAgents = await db.select().from(agents);
-  if (existingAgents.length === 0) {
-    console.log('Seeding agents...');
-    for (const agent of catalog.agents) {
-      await db.insert(agents).values({
-        slug: agent.slug,
-        name: agent.name,
-        description: agent.description,
-        division: agent.division,
-        emoji: agent.emoji,
-        filePath: agent.filePath,
+  const existingPersonas = await db.select().from(personas);
+  if (existingPersonas.length === 0) {
+    console.log('Seeding personas...');
+    for (const persona of catalog.agents) {
+      await db.insert(personas).values({
+        slug: persona.slug,
+        name: persona.name,
+        description: persona.description,
+        division: persona.division,
+        emoji: persona.emoji,
+        filePath: persona.filePath,
       });
     }
-    console.log(`Inserted ${catalog.agents.length} agents`);
+    console.log(`Inserted ${catalog.agents.length} personas`);
   } else {
-    console.log(`Agents already seeded (${existingAgents.length})`);
+    console.log(`Personas already seeded (${existingPersonas.length})`);
   }
 
   const existingPacks = await db.select().from(packs);
@@ -82,24 +82,24 @@ async function seedPacks() {
         })
         .returning();
 
-      const agentRows = await db
-        .select({ id: agents.id })
-        .from(agents)
+      const personaRows = await db
+        .select({ id: personas.id })
+        .from(personas)
         .where(
           inArray(
-            agents.slug,
+            personas.slug,
             pack.agentSlugs
           )
         );
 
-      for (const agent of agentRows) {
-        await db.insert(packAgents).values({
+      for (const persona of personaRows) {
+        await db.insert(packPersonas).values({
           packId: insertedPack.id,
-          agentId: agent.id,
+          personaId: persona.id,
         });
       }
 
-      console.log(`  ${pack.name}: ${agentRows.length} agents, $${(pack.priceCents / 100).toFixed(2)}`);
+      console.log(`  ${pack.name}: ${personaRows.length} personas, $${(pack.priceCents / 100).toFixed(2)}`);
     }
     console.log(`Inserted ${catalog.packs.length} packs`);
   } else {
@@ -108,8 +108,6 @@ async function seedPacks() {
 
   console.log('Seed complete.');
 }
-
-import { inArray } from 'drizzle-orm';
 
 seedPacks()
   .catch((error) => {

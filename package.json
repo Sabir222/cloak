@@ -8,6 +8,7 @@
     "db:seed": "npx tsx lib/db/seed.ts",
     "db:seed-packs": "npx tsx lib/db/seed-packs.ts",
     "db:seed-agent-skills": "npx tsx lib/db/seed-agent-skills.ts",
+"db:seed-agent-products": "npx tsx lib/db/seed-agent-products.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"

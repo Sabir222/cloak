@@ -9,7 +9,7 @@ import { ToolLogos } from "@/components/landing/tool-logos";
 import { MorphingText } from "@/components/ui/morphing-text";
 import { RoughButton } from "@/components/ui/rough-button";
 import { Link } from "@/i18n/navigation";
-import { getAllAgents, getAllPacks } from "@/lib/db/queries";
+import { getAllPersonas, getAllPacks } from "@/lib/db/queries";
 
 export async function generateMetadata({
   params,
@@ -34,12 +34,12 @@ export default async function HomePage({
   const t = await getTranslations({ locale, namespace: "landing" });
   const tPricing = await getTranslations({ locale, namespace: "pricing" });
 
-  const [packs, agents] = await Promise.all([getAllPacks(), getAllAgents()]);
+  const [packs, personas] = await Promise.all([getAllPacks(), getAllPersonas()]);
 
   const featuredPacks = packs.filter((p) => p.isFeatured).slice(0, 3);
   const regularPacks = packs.filter((p) => !p.isFeatured).slice(0, 4);
-  const divisionCount = new Set(agents.map((a) => a.division)).size;
-  const sampleAgents = agents.slice(0, 8);
+  const divisionCount = new Set(personas.map((a) => a.division)).size;
+  const samplePersonas = personas.slice(0, 8);
 
   return (
     <main className="overflow-hidden">
@@ -119,7 +119,7 @@ export default async function HomePage({
       <section className="relative py-16 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedStats
-            agentCount={agents.length}
+            personaCount={personas.length}
             packCount={packs.length}
             divisionCount={divisionCount}
           />
@@ -145,14 +145,15 @@ export default async function HomePage({
                     name={pack.name}
                     description={pack.description}
                     priceCents={pack.priceCents}
-                    agentCount={pack.agentCount}
+                    personaCount={pack.personaCount}
+                    skillCount={pack.skillCount}
                     bundleType={pack.bundleType}
                     isFeatured={i === 1}
                     badge={i === 1 ? tPricing("popular") : undefined}
                     variant="pricing"
                     translations={{
                       oneTime: tPricing("oneTime"),
-                      agentsIncluded: tPricing("agentsIncluded"),
+                      personasIncluded: tPricing("personasIncluded"),
                       skillPackContent: t("skillPackContent"),
                       getPack: tPricing("getPack"),
                       popular: tPricing("popular"),
@@ -187,7 +188,7 @@ export default async function HomePage({
 
       <HowItWorksSection />
 
-      {/* ─── Agent Showcase ─── */}
+      {/* ─── Persona Showcase ─── */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
@@ -199,13 +200,13 @@ export default async function HomePage({
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {sampleAgents.map((agent) => (
+            {samplePersonas.map((persona) => (
               <AgentCard
-                key={agent.id}
-                emoji={agent.emoji}
-                name={agent.name}
-                division={agent.division}
-                description={agent.description}
+                key={persona.id}
+                emoji={persona.emoji}
+                name={persona.name}
+                division={persona.division}
+                description={persona.description}
                 size="small"
               />
             ))}

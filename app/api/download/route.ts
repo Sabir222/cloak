@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import * as archiverLib from 'archiver';
 import { getPurchaseByToken, getPackById } from '@/lib/db/queries';
 import { db } from '@/lib/db/drizzle';
-import { agents, packAgents, packs } from '@/lib/db/schema';
+import { personas, packPersonas, packs, skills, agentProducts } from '@/lib/db/schema';
 import { eq, inArray } from 'drizzle-orm';
 import { readFileSync, readdirSync, statSync } from 'fs';
 import { join, relative } from 'path';
@@ -24,6 +24,55 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Payment not completed' }, { status: 403 });
   }
 
+  // Agent product (zip) — return the stored zip directly
+  if (purchase.type === 'agent' && purchase.agentProductId) {
+    const agent = await db
+      .select()
+      .from(agentProducts)
+      .where(eq(agentProducts.id, purchase.agentProductId))
+      .limit(1);
+
+    if (agent.length === 0) {
+      return NextResponse.json({ error: 'Agent product not found' }, { status: 404 });
+    }
+
+    const zipPath = join(process.cwd(), agent[0].zipPath);
+    const zipBuffer = readFileSync(zipPath);
+
+    return new NextResponse(zipBuffer, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/zip',
+        'Content-Disposition': `attachment; filename="${agent[0].slug}-v${agent[0].version || '1.0.0'}.zip"`,
+        'Content-Length': zipBuffer.length.toString(),
+      },
+    });
+  }
+
+  // Individual skill — return the SKILL.md file
+  if (purchase.type === 'skill' && purchase.skillId) {
+    const skill = await db
+      .select()
+      .from(skills)
+      .where(eq(skills.id, purchase.skillId))
+      .limit(1);
+
+    if (skill.length === 0) {
+      return NextResponse.json({ error: 'Skill not found' }, { status: 404 });
+    }
+
+    const skillPath = join(process.cwd(), skill[0].filePath);
+    const content = readFileSync(skillPath, 'utf-8');
+
+    return new NextResponse(content, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/markdown',
+        'Content-Disposition': `attachment; filename="${skill[0].slug}.md"`,
+      },
+    });
+  }
+
   const chunks: Buffer[] = [];
   const writableStream = new Writable({
     write(chunk, _encoding, callback) {
@@ -35,7 +84,7 @@ export async function GET(request: NextRequest) {
   const archive = (archiverLib as any)('zip', { zlib: { level: 9 } });
   archive.pipe(writableStream);
 
-  let packName = 'Custom Agent Pack';
+  let packName = 'Agent Pack';
   let pack: typeof packs.$inferSelect | null = null;
 
   if (purchase.packId) {
@@ -52,24 +101,17 @@ export async function GET(request: NextRequest) {
 
 ### Claude Code (Recommended)
 \`\`\`bash
-# Install as a plugin
 claude --plugin-dir /path/to/${pack.slug}
 
 # Or copy skills manually
 cp -r skills/* ~/.claude/skills/
-cp -r agents/* ~/.claude/agents/
+cp -r personas/* ~/.claude/agents/
 cp -r .claude/commands/* ~/.claude/commands/
 \`\`\`
 
 ### Cursor
 \`\`\`bash
-# Copy SKILL.md files into Cursor rules
 cp skills/*/SKILL.md ~/.cursor/rules/
-\`\`\`
-
-### Antigravity CLI
-\`\`\`bash
-agy plugin install /path/to/${pack.slug}
 \`\`\`
 
 ### Gemini CLI
@@ -79,7 +121,6 @@ gemini skills install ./skills/
 
 ### OpenCode / Other Tools
 Skills are plain Markdown — they work with any agent that accepts instruction files.
-Copy the SKILL.md files into your tool's rules/skills directory.
 
 ## Contents
 
@@ -94,37 +135,36 @@ If you have any issues, please contact support.
 `;
 
     archive.append(readmeContent, { name: 'README.md' });
-
     addDirectoryToArchive(archive, skillPackDir, pack.dataPath, '');
   } else {
-    let agentFiles: { name: string; filePath: string }[] = [];
+    let personaFiles: { name: string; filePath: string }[] = [];
 
     if (purchase.type === 'pack' && purchase.packId) {
-      const packAgentRows = await db
-        .select({ slug: agents.slug, name: agents.name, filePath: agents.filePath })
-        .from(packAgents)
-        .innerJoin(agents, eq(packAgents.agentId, agents.id))
-        .where(eq(packAgents.packId, purchase.packId));
+      const packPersonaRows = await db
+        .select({ slug: personas.slug, name: personas.name, filePath: personas.filePath })
+        .from(packPersonas)
+        .innerJoin(personas, eq(packPersonas.personaId, personas.id))
+        .where(eq(packPersonas.packId, purchase.packId));
 
-      agentFiles = packAgentRows.map((a) => ({
+      personaFiles = packPersonaRows.map((a) => ({
         name: `${a.slug}.md`,
         filePath: a.filePath,
       }));
-    } else if (purchase.type === 'custom' && purchase.agentIds) {
-      const ids = purchase.agentIds as number[];
-      const customAgents = await db
-        .select({ slug: agents.slug, name: agents.name, filePath: agents.filePath })
-        .from(agents)
-        .where(inArray(agents.id, ids));
+    } else if (purchase.type === 'custom' && purchase.personaIds) {
+      const ids = purchase.personaIds as number[];
+      const customPersonas = await db
+        .select({ slug: personas.slug, name: personas.name, filePath: personas.filePath })
+        .from(personas)
+        .where(inArray(personas.id, ids));
 
-      agentFiles = customAgents.map((a) => ({
+      personaFiles = customPersonas.map((a) => ({
         name: `${a.slug}.md`,
         filePath: a.filePath,
       }));
     }
 
-    if (agentFiles.length === 0) {
-      return NextResponse.json({ error: 'No agents found for this purchase' }, { status: 404 });
+    if (personaFiles.length === 0) {
+      return NextResponse.json({ error: 'No personas found for this purchase' }, { status: 404 });
     }
 
     const agentsDir = join(process.cwd(), 'data', 'agents');
@@ -138,30 +178,25 @@ If you have any issues, please contact support.
 cp *.md ~/.claude/agents/
 \`\`\`
 
-### Cursor
-\`\`\`bash
-cp *.md ~/.cursor/rules/
-\`\`\`
-
-### OpenCode / Other Tools
+### OpenCode
 \`\`\`bash
 cp *.md ~/.config/opencode/agents/
 \`\`\`
 
-## Agents Included
+## Personas Included
 
-${agentFiles.map((a) => `- ${a.name}`).join('\n')}
+${personaFiles.map((a) => `- ${a.name}`).join('\n')}
 `;
 
     archive.append(readmeContent, { name: 'README.md' });
 
-    for (const agent of agentFiles) {
-      const fullPath = join(agentsDir, agent.filePath);
+    for (const persona of personaFiles) {
+      const fullPath = join(agentsDir, persona.filePath);
       try {
         const content = readFileSync(fullPath, 'utf-8');
-        archive.append(content, { name: agent.name });
+        archive.append(content, { name: persona.name });
       } catch (err) {
-        console.error(`Failed to read agent file: ${agent.filePath}`, err);
+        console.error(`Failed to read persona file: ${persona.filePath}`, err);
       }
     }
   }

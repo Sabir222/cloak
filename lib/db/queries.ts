@@ -1,6 +1,6 @@
 import { desc, and, eq, isNull, inArray } from 'drizzle-orm';
 import { db } from './drizzle';
-import { activityLogs, teamMembers, teams, users, agents, packs, packAgents, purchases } from './schema';
+import { activityLogs, teamMembers, teams, users, personas, skills, agentProducts, packs, packSkills, packPersonas, purchases } from './schema';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth/session';
 
@@ -129,43 +129,73 @@ export async function getTeamForUser() {
   return result?.team || null;
 }
 
-export async function getAllAgents() {
-  return await db.select().from(agents).orderBy(agents.division, agents.name);
+export async function getAllPersonas() {
+  return await db.select().from(personas).orderBy(personas.division, personas.name);
 }
 
-export async function getAgentsByDivision(division: string) {
+export async function getPersonasByDivision(division: string) {
   return await db
     .select()
-    .from(agents)
-    .where(eq(agents.division, division))
-    .orderBy(agents.name);
+    .from(personas)
+    .where(eq(personas.division, division))
+    .orderBy(personas.name);
 }
 
-export async function getAgentBySlug(slug: string) {
+export async function getPersonaBySlug(slug: string) {
   const result = await db
     .select()
-    .from(agents)
-    .where(eq(agents.slug, slug))
+    .from(personas)
+    .where(eq(personas.slug, slug))
     .limit(1);
   return result[0] || null;
 }
 
-export async function getAgentsBySlugs(slugs: string[]) {
+export async function getPersonasBySlugs(slugs: string[]) {
   return await db
     .select()
-    .from(agents)
-    .where(inArray(agents.slug, slugs));
+    .from(personas)
+    .where(inArray(personas.slug, slugs));
+}
+
+export async function getAllSkills() {
+  return await db.select().from(skills).orderBy(skills.name);
+}
+
+export async function getSkillBySlug(slug: string) {
+  const result = await db
+    .select()
+    .from(skills)
+    .where(eq(skills.slug, slug))
+    .limit(1);
+  return result[0] || null;
+}
+
+export async function getAllAgentProducts() {
+  return await db.select().from(agentProducts).orderBy(agentProducts.name);
+}
+
+export async function getAgentProductBySlug(slug: string) {
+  const result = await db
+    .select()
+    .from(agentProducts)
+    .where(eq(agentProducts.slug, slug))
+    .limit(1);
+  return result[0] || null;
 }
 
 export async function getAllPacks() {
   const allPacks = await db.select().from(packs).orderBy(desc(packs.isFeatured), packs.name);
   const result = [];
   for (const pack of allPacks) {
-    const agentCount = await db
-      .select({ count: packAgents.packId })
-      .from(packAgents)
-      .where(eq(packAgents.packId, pack.id));
-    result.push({ ...pack, agentCount: agentCount.length });
+    const skillCount = await db
+      .select({ count: packSkills.packId })
+      .from(packSkills)
+      .where(eq(packSkills.packId, pack.id));
+    const personaCount = await db
+      .select({ count: packPersonas.packId })
+      .from(packPersonas)
+      .where(eq(packPersonas.packId, pack.id));
+    result.push({ ...pack, skillCount: skillCount.length, personaCount: personaCount.length });
   }
   return result;
 }
@@ -178,21 +208,33 @@ export async function getPackBySlug(slug: string) {
     .limit(1);
   if (pack.length === 0) return null;
 
-  const packAgentsList = await db
+  const personasList = await db
     .select({
-      id: agents.id,
-      slug: agents.slug,
-      name: agents.name,
-      description: agents.description,
-      division: agents.division,
-      emoji: agents.emoji,
+      id: personas.id,
+      slug: personas.slug,
+      name: personas.name,
+      description: personas.description,
+      division: personas.division,
+      emoji: personas.emoji,
     })
-    .from(packAgents)
-    .innerJoin(agents, eq(packAgents.agentId, agents.id))
-    .where(eq(packAgents.packId, pack[0].id))
-    .orderBy(agents.name);
+    .from(packPersonas)
+    .innerJoin(personas, eq(packPersonas.personaId, personas.id))
+    .where(eq(packPersonas.packId, pack[0].id))
+    .orderBy(personas.name);
 
-  return { ...pack[0], agents: packAgentsList };
+  const skillsList = await db
+    .select({
+      id: skills.id,
+      slug: skills.slug,
+      name: skills.name,
+      description: skills.description,
+    })
+    .from(packSkills)
+    .innerJoin(skills, eq(packSkills.skillId, skills.id))
+    .where(eq(packSkills.packId, pack[0].id))
+    .orderBy(skills.name);
+
+  return { ...pack[0], personas: personasList, skills: skillsList };
 }
 
 export async function getFeaturedPacks() {
@@ -207,7 +249,9 @@ export async function createPurchase(data: {
   userId: number;
   type: string;
   packId?: number | null;
-  agentIds?: number[];
+  personaIds?: number[];
+  skillId?: number | null;
+  agentProductId?: number | null;
   stripeSessionId?: string;
   amountCents: number;
   downloadToken: string;
@@ -218,7 +262,9 @@ export async function createPurchase(data: {
       userId: data.userId,
       type: data.type,
       packId: data.packId || null,
-      agentIds: data.agentIds || null,
+      personaIds: data.personaIds || null,
+      skillId: data.skillId || null,
+      agentProductId: data.agentProductId || null,
       stripeSessionId: data.stripeSessionId,
       amountCents: data.amountCents,
       status: 'pending',
@@ -273,16 +319,24 @@ export async function getPurchasesByUser(userId: number) {
       id: purchases.id,
       type: purchases.type,
       packId: purchases.packId,
-      agentIds: purchases.agentIds,
+      personaIds: purchases.personaIds,
+      skillId: purchases.skillId,
+      agentProductId: purchases.agentProductId,
       amountCents: purchases.amountCents,
       status: purchases.status,
       downloadToken: purchases.downloadToken,
       createdAt: purchases.createdAt,
       packName: packs.name,
       packSlug: packs.slug,
+      skillName: skills.name,
+      skillSlug: skills.slug,
+      agentProductName: agentProducts.name,
+      agentProductSlug: agentProducts.slug,
     })
     .from(purchases)
     .leftJoin(packs, eq(purchases.packId, packs.id))
+    .leftJoin(skills, eq(purchases.skillId, skills.id))
+    .leftJoin(agentProducts, eq(purchases.agentProductId, agentProducts.id))
     .where(eq(purchases.userId, userId))
     .orderBy(desc(purchases.createdAt));
 }

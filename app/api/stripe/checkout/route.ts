@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
 
     const purchaseType = session.metadata?.purchase_type;
 
-    if (purchaseType === 'pack' || purchaseType === 'custom') {
+    if (purchaseType === 'pack' || purchaseType === 'custom' || purchaseType === 'skill' || purchaseType === 'agent') {
       await setSession(user[0]);
       const locale = await getLocale();
       return NextResponse.redirect(

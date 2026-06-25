@@ -13,11 +13,11 @@ type StatItem = {
 };
 
 export function AnimatedStats({
-  agentCount,
+  personaCount,
   packCount,
   divisionCount
 }: {
-  agentCount: number;
+  personaCount: number;
   packCount: number;
   divisionCount: number;
 }) {
@@ -26,7 +26,7 @@ export function AnimatedStats({
   const inView = useInView(ref, { once: true, margin: '-50px' });
 
   const stats: StatItem[] = [
-    { value: agentCount, label: t('statAgents'), svg: '/square.svg', suffix: '+' },
+    { value: personaCount, label: t('statAgents'), svg: '/square.svg', suffix: '+' },
     { value: packCount, label: t('statPacks'), svg: '/rectangle.svg' },
     { value: divisionCount, label: t('statDivisions'), svg: '/triangle.svg' },
   ];

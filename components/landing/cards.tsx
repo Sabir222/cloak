@@ -10,7 +10,8 @@ type PackCardProps = {
 	name: string;
 	description: string | null;
 	priceCents: number;
-	agentCount: number;
+	personaCount?: number;
+	skillCount?: number;
 	bundleType?: string | null;
 	isFeatured?: boolean;
 	badge?: string;
@@ -19,7 +20,7 @@ type PackCardProps = {
 	cta?: ReactNode;
 	translations: {
 		oneTime: string;
-		agentsIncluded: string;
+		personasIncluded: string;
 		skillPackContent: string;
 		getPack: string;
 		popular?: string;
@@ -32,7 +33,8 @@ export function PackCard({
 	name,
 	description,
 	priceCents,
-	agentCount,
+	personaCount = 0,
+	skillCount = 0,
 	bundleType,
 	isFeatured,
 	badge,
@@ -44,6 +46,10 @@ export function PackCard({
 	const t = translations;
 	const isSkill = bundleType === "skill-pack";
 	const isCompact = variant === "compact";
+
+	const subtitle = isSkill
+		? t.skillPackContent
+		: `${personaCount} ${t.personasIncluded}`;
 
 	return (
 		<RoughBorder
@@ -77,11 +83,7 @@ export function PackCard({
 								{description}
 							</p>
 							<div className="mt-4 flex items-center justify-between">
-								<span className="text-xs text-gray-400">
-									{isSkill
-										? t.skillPackContent
-										: `${agentCount} ${t.agentsIncluded}`}
-								</span>
+								<span className="text-xs text-gray-400">{subtitle}</span>
 								<span className="font-lora text-lg font-bold text-gray-900">
 									${(priceCents / 100).toFixed(0)}
 								</span>
@@ -97,11 +99,7 @@ export function PackCard({
 								</span>
 								<span className="text-sm text-gray-400 mb-1.5">{t.oneTime}</span>
 							</div>
-							<div className="mt-2 text-sm text-gray-500">
-								{isSkill
-									? t.skillPackContent
-									: `${agentCount} ${t.agentsIncluded}`}
-							</div>
+							<div className="mt-2 text-sm text-gray-500">{subtitle}</div>
 							{cta && <div className="mt-auto pt-6">{cta}</div>}
 						</>
 					)}
@@ -116,12 +114,12 @@ type PackLinkCardProps = {
 	name: string;
 	description: string | null;
 	priceCents: number;
-	agentCount: number;
+	personaCount?: number;
 	bundleType?: string | null;
 	slug: string;
 	className?: string;
 	translations: {
-		agentsIncluded: string;
+		personasIncluded: string;
 		skillPackContent: string;
 	};
 };
@@ -130,7 +128,7 @@ export function PackLinkCard({
 	name,
 	description,
 	priceCents,
-	agentCount,
+	personaCount = 0,
 	bundleType,
 	slug,
 	className,
@@ -161,7 +159,7 @@ export function PackLinkCard({
 						<span className="text-xs text-gray-400">
 							{isSkill
 								? t.skillPackContent
-								: `${agentCount} ${t.agentsIncluded}`}
+								: `${personaCount} ${t.personasIncluded}`}
 						</span>
 						<span className="font-lora text-lg font-bold text-gray-900">
 							${(priceCents / 100).toFixed(0)}
@@ -208,8 +206,8 @@ export function FeatureCard({
 	);
 }
 
-/* ─── Agent Card ─── */
-type AgentCardProps = {
+/* ─── Persona Card ─── */
+type PersonaCardProps = {
 	emoji?: string | null;
 	name: string;
 	division: string;
@@ -220,7 +218,7 @@ type AgentCardProps = {
 	size?: "default" | "small";
 };
 
-export function AgentCard({
+export function PersonaCard({
 	emoji,
 	name,
 	division,
@@ -229,7 +227,7 @@ export function AgentCard({
 	onClick,
 	className,
 	size = "default",
-}: AgentCardProps) {
+}: PersonaCardProps) {
 	const isSmall = size === "small";
 
 	const content = (
@@ -371,6 +369,8 @@ type ShineCardProps = {
 	children: ReactNode;
 	className?: string;
 };
+
+export const AgentCard = PersonaCard;
 
 export function ShineCard({
 	children,

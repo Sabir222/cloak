@@ -3,10 +3,12 @@
 import { redirect } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
 import { randomUUID } from 'crypto';
-import { getUser, getPackById, createPurchase } from '@/lib/db/queries';
+import { getUser, getPackById, getSkillBySlug, getAgentProductBySlug, createPurchase } from '@/lib/db/queries';
 import {
   createPackCheckoutSession,
-  createCustomCheckoutSession
+  createCustomCheckoutSession,
+  createSkillCheckoutSession,
+  createAgentProductCheckoutSession
 } from '@/lib/payments/stripe';
 
 export async function buyPack(packId: number) {
@@ -47,7 +49,7 @@ export async function buyPack(packId: number) {
   redirect(url);
 }
 
-export async function buyCustomAgents(agentIds: number[]) {
+export async function buyCustomPersonas(personaIds: number[]) {
   const user = await getUser();
 
   if (!user) {
@@ -55,25 +57,102 @@ export async function buyCustomAgents(agentIds: number[]) {
     redirect(`/${locale}/sign-up?redirect=custom`);
   }
 
-  if (!agentIds || agentIds.length === 0) {
-    return { error: 'No agents selected' };
+  if (!personaIds || personaIds.length === 0) {
+    return { error: 'No personas selected' };
   }
 
   const downloadToken = randomUUID();
-  const amountCents = agentIds.length * 500;
+  const amountCents = personaIds.length * 500;
 
   await createPurchase({
     userId: user.id,
     type: 'custom',
-    agentIds,
+    personaIds,
     amountCents,
     downloadToken
   });
 
   const url = await createCustomCheckoutSession({
     userId: user.id,
-    agentCount: agentIds.length,
-    agentIds,
+    agentCount: personaIds.length,
+    agentIds: personaIds,
+    downloadToken
+  });
+
+  redirect(url);
+}
+export const buyCustomAgents = buyCustomPersonas;
+
+export async function buySkill(slug: string) {
+  const user = await getUser();
+
+  if (!user) {
+    const locale = await getLocale();
+    redirect(`/${locale}/sign-up?redirect=skill&slug=${slug}`);
+  }
+
+  const skill = await getSkillBySlug(slug);
+  if (!skill) {
+    return { error: 'Skill not found' };
+  }
+
+  if (!skill.stripePriceId) {
+    return { error: 'Skill is not available for purchase' };
+  }
+
+  const downloadToken = randomUUID();
+
+  await createPurchase({
+    userId: user.id,
+    type: 'skill',
+    skillId: skill.id,
+    amountCents: skill.priceCents,
+    downloadToken
+  });
+
+  const url = await createSkillCheckoutSession({
+    userId: user.id,
+    skillId: skill.id,
+    priceId: skill.stripePriceId,
+    amountCents: skill.priceCents,
+    downloadToken
+  });
+
+  redirect(url);
+}
+
+export async function buyAgentProduct(slug: string) {
+  const user = await getUser();
+
+  if (!user) {
+    const locale = await getLocale();
+    redirect(`/${locale}/sign-up?redirect=agent&slug=${slug}`);
+  }
+
+  const agent = await getAgentProductBySlug(slug);
+  if (!agent) {
+    return { error: 'Agent product not found' };
+  }
+
+  if (!agent.stripePriceId) {
+    return { error: 'Agent product is not available for purchase' };
+  }
+
+  const downloadToken = randomUUID();
+
+  await createPurchase({
+    userId: user.id,
+    type: 'agent',
+    agentProductId: agent.id,
+    amountCents: agent.priceCents,
+    downloadToken
+  });
+
+  const url = await createAgentProductCheckoutSession({
+    userId: user.id,
+    agentProductId: agent.id,
+    priceId: agent.stripePriceId,
+    amountCents: agent.priceCents,
     downloadToken
   });
 

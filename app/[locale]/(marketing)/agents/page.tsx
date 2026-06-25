@@ -1,12 +1,10 @@
-import type { Metadata } from 'next';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
-
-import { getAllAgents } from '@/lib/db/queries';
-import {
-  AgentBrowser,
-  type AgentSummary,
-  type AgentsByDivision
-} from './agent-browser';
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getAllAgentProducts } from "@/lib/db/queries";
+import { Link } from "@/i18n/navigation";
+import { ShineCard } from "@/components/landing/cards";
+import { RoughButton } from "@/components/ui/rough-button";
+import { Globe, Zap, Download } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -21,96 +19,79 @@ export async function generateMetadata({
   };
 }
 
-const TIERS = [
-  { key: "tier1", agents: "1–9", price: 5, discount: 0 },
-  { key: "tier2", agents: "10+", price: 4, discount: 20 },
-  { key: "tier3", agents: "20+", price: 3.5, discount: 30 },
-  { key: "tier4", agents: "30+", price: 3, discount: 40 },
-] as const;
-
 export default async function AgentsPage({
-  params
+  params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations({ locale, namespace: 'agents' });
-  const tPricing = await getTranslations({ locale, namespace: 'pricing' });
-
-  const agents = await getAllAgents();
-
-  const grouped: AgentsByDivision = {};
-  for (const agent of agents) {
-    if (!grouped[agent.division]) grouped[agent.division] = [];
-    grouped[agent.division].push({
-      id: agent.id,
-      slug: agent.slug,
-      name: agent.name,
-      description: agent.description,
-      division: agent.division,
-      emoji: agent.emoji
-    });
-  }
+  const t = await getTranslations({ locale, namespace: "agents" });
+  const agents = await getAllAgentProducts();
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[110px] pb-32">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[110px] pb-12">
       <section className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 tracking-tight sm:text-5xl">
-          {t('title')}
+          {t("title")}
         </h1>
         <p className="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">
-          {t('description')}
+          {t("description")}
         </p>
       </section>
 
-      {/* ─── Pricing tiers ─── */}
-      <section className="mb-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-          {TIERS.map((tier) => {
-            const priceLabel = tier.price % 1 === 0 ? `$${tier.price}` : `$${tier.price.toFixed(2)}`;
-            return (
-              <div
-                key={tier.key}
-                className="rounded-xl border border-gray-200 bg-white p-5 text-center"
-              >
-                <div className="text-sm font-semibold text-gray-900 mb-1">
-                  {t(`${tier.key}Label`)}
-                </div>
-                <div className="text-2xl font-bold text-orange-500">
-                  {priceLabel}
-                  <span className="text-sm font-normal text-gray-500">{tPricing('agentsIncluded').replace('agents', '').trim() ? '/agent' : '/agent'}</span>
-                </div>
-                {tier.discount > 0 && (
-                  <div className="mt-1.5 inline-block rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-700">
-                    {t(`${tier.key}Discount`)}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+      {agents.length === 0 ? (
+        <div className="text-center py-16">
+          <p className="text-gray-500">{t("noAgents")}</p>
         </div>
-      </section>
-
-      <AgentBrowser
-        agentsByDivision={grouped}
-        translations={{
-          searchPlaceholder: t('searchPlaceholder'),
-          noResults: t('noResults'),
-          selected: t('selected'),
-          total: t('total'),
-          checkout: t('checkout'),
-          clear: t('clear'),
-          perAgent: t('perAgent'),
-          checkingOut: t('checkingOut'),
-          agentsCount: t('agentsCount'),
-          tier2Discount: t('tier2Discount'),
-          tier3Discount: t('tier3Discount'),
-          tier4Discount: t('tier4Discount'),
-        }}
-      />
+      ) : (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {agents.map((agent) => (
+            <ShineCard key={agent.id} className="flex flex-col">
+              <div className="flex-1">
+                <span className="inline-block px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-medium mb-3">
+                  {t("agentProduct")}
+                </span>
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                  {agent.name}
+                </h2>
+                <p className="text-sm text-gray-500 mb-4">
+                  {agent.description}
+                </p>
+                {agent.version && (
+                  <p className="text-xs text-gray-400 mb-4">
+                    {t("version")} {agent.version}
+                  </p>
+                )}
+                <div className="flex flex-wrap gap-3 mb-4">
+                  <span className="inline-flex items-center gap-1 text-xs text-gray-500">
+                    <Globe className="h-3 w-3" /> {t("sources")}
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-xs text-gray-500">
+                    <Zap className="h-3 w-3" /> {t("speed")}
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-xs text-gray-500">
+                    <Download className="h-3 w-3" /> {t("install")}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                <span className="text-2xl font-bold text-gray-900">
+                  ${agent.priceCents / 100}
+                </span>
+                <RoughButton
+                  href={`/agents/${agent.slug}`}
+                  color="#ea580c"
+                  fill="#fff7ed"
+                  className="text-sm"
+                >
+                  {t("buyAgent")}
+                </RoughButton>
+              </div>
+            </ShineCard>
+          ))}
+        </div>
+      )}
     </main>
   );
 }
-
-export type { AgentSummary, AgentsByDivision };

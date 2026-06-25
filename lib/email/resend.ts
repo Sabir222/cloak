@@ -12,31 +12,31 @@ function getResend() {
 const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@example.com';
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 
-export async function sendAgentEmail({
+export async function sendProductEmail({
   email,
   downloadToken,
-  packName,
-  agentCount
+  productName,
+  itemCount
 }: {
   email: string;
   downloadToken: string;
-  packName: string;
-  agentCount: number;
+  productName: string;
+  itemCount: number;
 }) {
   const downloadUrl = `${BASE_URL}/api/download?token=${downloadToken}`;
 
   const { data, error } = await getResend().emails.send({
     from: FROM_EMAIL,
     to: email,
-    subject: `Your ${packName} is ready to download`,
+    subject: `Your ${productName} is ready to download`,
     html: `
       <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
         <h1 style="color: #1a1a1a; font-size: 24px; margin-bottom: 16px;">
-          Your ${packName} is ready! 🎉
+          Your ${productName} is ready! 🎉
         </h1>
         <p style="color: #555; font-size: 16px; line-height: 1.6;">
-          Thank you for your purchase! Your pack contains
-          <strong>${agentCount} agent${agentCount > 1 ? 's' : ''}</strong>
+          Thank you for your purchase! Your product contains
+          <strong>${itemCount} file${itemCount > 1 ? 's' : ''}</strong>
           ready to download.
         </p>
         <div style="margin: 32px 0;">
@@ -44,13 +44,12 @@ export async function sendAgentEmail({
             href="${downloadUrl}"
             style="display: inline-block; background: #f97316; color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: 600;"
           >
-            Download Your Agents
+            Download Now
           </a>
         </div>
         <p style="color: #888; font-size: 14px; line-height: 1.6;">
-          The download link will give you a ZIP file containing all agent
-          configuration files (.md) with installation instructions for your
-          preferred AI tool (Claude Code, Cursor, Windsurf, and more).
+          The download link will give you a file with configuration and setup instructions
+          for your preferred AI tool (Claude Code, Cursor, Windsurf, and more).
         </p>
         <p style="color: #888; font-size: 14px;">
           If the button doesn't work, copy and paste this URL into your browser:<br>
@@ -58,7 +57,7 @@ export async function sendAgentEmail({
         </p>
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;">
         <p style="color: #aaa; font-size: 12px;">
-          This email was sent because you purchased a pack from The Agency.
+          This email was sent because you purchased a product from The Agency.
         </p>
       </div>
     `
