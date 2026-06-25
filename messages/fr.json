@@ -17,8 +17,12 @@
       "description": "Parcourez nos sélections d'agents IA thématiques. Chaque pack est conçu pour fonctionner ensemble afin que vous puissiez déployer une équipe complète en quelques minutes."
     },
     "agents": {
-      "title": "Composez le vôtre",
-      "description": "Mixez et associez des agents IA individuels pour créer un pack sur mesure adapté à votre workflow. 5 $ par agent."
+      "title": "Produits Agent",
+      "description": "Agents prêts à l'emploi (format zip) qui enrichissent opencode avec des capacités puissantes."
+    },
+    "skills": {
+      "title": "Compétences",
+      "description": "Parcourez et achetez des compétences d'ingénierie individuelles pour votre agent IA."
     },
     "signIn": {
       "title": "Connexion",

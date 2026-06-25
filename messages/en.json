@@ -17,8 +17,12 @@
       "description": "Browse our curated bundles of themed AI agents. Each pack is designed to work together so you can deploy a full team in minutes."
     },
     "agents": {
-      "title": "Build Your Own",
-      "description": "Mix and match individual AI agents to create a custom pack tailored to your workflow. $5 per agent."
+      "title": "Agent Products",
+      "description": "Ready-to-run zip-based agents that extend opencode with powerful capabilities."
+    },
+    "skills": {
+      "title": "Skills",
+      "description": "Browse and purchase individual engineering skills for your AI coding agent."
     },
     "signIn": {
       "title": "Sign In",
